@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleNeutrinoLoaderGUI", "SimpleNeutrinoLoaderGUI\SimpleNeutrinoLoaderGUI.csproj", "{566705E4-0F5A-46F4-9486-6B21446EC39F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{566705E4-0F5A-46F4-9486-6B21446EC39F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{566705E4-0F5A-46F4-9486-6B21446EC39F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{566705E4-0F5A-46F4-9486-6B21446EC39F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{566705E4-0F5A-46F4-9486-6B21446EC39F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8D1A79B8-5D35-4B9B-9A55-96E4183C9D3B}
+	EndGlobalSection
+EndGlobal

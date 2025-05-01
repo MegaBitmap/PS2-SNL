@@ -1,0 +1,55 @@
+﻿<Window x:Class="SimpleNeutrinoLoaderGUI.InstallWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SimpleNeutrinoLoaderGUI"
+        mc:Ignorable="d"
+        Title="InstallWindow" Height="450" Width="800" FontSize="16">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+
+                </Style>
+            </Style.Resources>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Background" Value="WhiteSmoke"/>
+        </Style>
+    </Window.Resources>
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FF2D70B9" Offset="1"/>
+            <GradientStop Color="#FFA1F9FF" Offset="0"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition  Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock  Margin="20,30,0,30" Background="WhiteSmoke" TextWrapping="WrapWithOverflow" Grid.RowSpan="3">
+                Select which storage device you would like to install Simple Neutrino Loader and Enceladus to.<LineBreak/><LineBreak/>
+                ****PLEASE NOTE****<LineBreak/>
+                <Bold>The MC MUST have 1.2MB (1,200KB)<LineBreak/>
+                or more free unused space available.</Bold><LineBreak/>
+                ****PLEASE NOTE****<LineBreak/><LineBreak/>
+                The settings for PS2-Basic-Bootloader will be updated to autoload network drivers and autorun SNL.<LineBreak/>
+                The file 'mc?:/SYS-CONF/PS2BBL.INI' or 'mc?:/PS2BBL/CONFIG.INI' will be overwritten.
+            </TextBlock>
+            <Button x:Name="ButtonMC0" Content="Install to Memory Card Slot 1 (mc0)" IsEnabled="False" Grid.Column="1" Grid.Row="0" Margin="40" Click="ButtonMC0_Click"/>
+            <Button x:Name="ButtonMC1" Content="Install to Memory Card Slot 1 (mc1)" IsEnabled="False" Grid.Column="1" Grid.Row="1" Margin="40" Click="ButtonMC1_Click"/>
+            <Button x:Name="ButtonMass" Content="Install to USB Drive (mass)" IsEnabled="False" Grid.Column="1" Grid.Row="2" Margin="40" Click="ButtonMass_Click"/>
+
+
+        </Grid>
+
+    </Grid>
+</Window>

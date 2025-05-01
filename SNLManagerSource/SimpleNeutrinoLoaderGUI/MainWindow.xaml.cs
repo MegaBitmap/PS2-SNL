@@ -13,7 +13,7 @@ namespace SimpleNeutrinoLoaderGUI
     public partial class MainWindow : Window
     {
         readonly string version = $"Version {Assembly.GetExecutingAssembly().GetName().Version} by MegaBitmap";
-        const string helpUrl = "https://github.com/MegaBitmap/PS2-SNL"; // TODO FIX THIS
+        const string helpUrl = "https://github.com/MegaBitmap/PS2-SNL?tab=readme-ov-file#udpbd-setup";
         readonly List<string> gameList = [];
         string gamePath = "";
 

@@ -32,7 +32,7 @@ Somewhere on your PC, for example Documents, create a new folder PS2.
 Inside the PS2 folder, create CD and DVD folders.  
 Rip/copy any PlayStation 2 ISOs you wish to play into the DVD or CD folder.  
 SNL-Manager can automatically convert Bin+Cue files to ISO if the box is checked then Synced.  
-Download the latest release from this page (SNL-Manager).  
+Download SNL-Manager from [here](https://github.com/MegaBitmap/PS2-SNL/releases).  
 Extract the SNL-Manager folder to the Desktop or Documents.  
 It is a portable app, do NOT use Program Files or any other system related folder.  
 **DIRECT Connection** - Plug in the ethernet cable as shown: ↓  
@@ -164,7 +164,7 @@ sudo mount /dev/nvme0n1p6 /mnt/ps2/ -o uid=$USER
 
 ## HDD, HDL, ILINK, MMCE, MX4, or USB Setup:
 
-Download the latest release of SimpleNeutrinoLoader (SNL-Full-v1.0.0.0.zip).  
+Download the latest release of SimpleNeutrinoLoader (SNL-Full) from [here](https://github.com/MegaBitmap/PS2-SNL/releases).  
 Extract then copy the Enceladus and SimpleNeutrinoLoader folders onto a PS2 memory card with LaunchELF.  
 If using psuInstall, copy the psu files then psuPaste onto the memory card.  
 The Enceladus and SimpleNeutrinoLoader folder should be placed in the root directory.  

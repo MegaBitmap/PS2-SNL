@@ -92,7 +92,7 @@ The server needs to be open and running for the entire play session (Disable sle
 Now you are ready to play, run Enceladus or reboot the PS2.  
 ![snl](readmeImages/snl.jpg)  
 
-If you want the server to run automatically when the PC is starts follow these steps:  
+If you want the server to run automatically when the PC starts:  
 - Create a shortcut to `udpbd-vexfat.exe`
 - Right click the shortcut then select properties
 - In the `Target` text box add a space the location of the DVD and CD folders in quotes.  

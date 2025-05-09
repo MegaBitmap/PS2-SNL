@@ -50,7 +50,7 @@ namespace SNL_CLI
                 FTP.CreateDirectory(client, $"/{rootFolder}/{childFolder}/Enceladus");
                 InstallEnceladus(client, $"/{rootFolder}/{childFolder}/Enceladus/");
             }
-            else if (!VerifyFTPFiles(client, enceladusFiles, $"/{rootFolder}/{childFolder}/Enceladus"))
+            else if (!VerifyFTPFiles(client, enceladusFiles, $"/{rootFolder}/{childFolder}/Enceladus", "InstallFiles/Enceladus"))
             {
                 InstallEnceladus(client, $"/{rootFolder}/{childFolder}/Enceladus/");
             }
@@ -59,17 +59,17 @@ namespace SNL_CLI
                 FTP.CreateDirectory(client, $"/{rootFolder}/{childFolder}/SimpleNeutrinoLoader");
                 InstallSNL(client, $"/{rootFolder}/{childFolder}/SimpleNeutrinoLoader/");
             }
-            else if (!VerifyFTPFiles(client, SNLFiles, $"/{rootFolder}/{childFolder}/SimpleNeutrinoLoader"))
+            else if (!VerifyFTPFiles(client, SNLFiles, $"/{rootFolder}/{childFolder}/SimpleNeutrinoLoader", "InstallFiles/SimpleNeutrinoLoader"))
             {
                 InstallSNL(client, $"/{rootFolder}/{childFolder}/SimpleNeutrinoLoader/");
             }
             Console.WriteLine("Verifying Installation . . .");
-            if (!VerifyFTPFiles(client, enceladusFiles, $"/{rootFolder}/{childFolder}/Enceladus"))
+            if (!VerifyFTPFiles(client, enceladusFiles, $"/{rootFolder}/{childFolder}/Enceladus", "InstallFiles/Enceladus"))
             {
                 Console.WriteLine($"Failed to install Enceladus to {rootFolder}");
                 MiscMethods.PauseExit(23);
             }
-            else if (!VerifyFTPFiles(client, SNLFiles, $"/{rootFolder}/{childFolder}/SimpleNeutrinoLoader"))
+            else if (!VerifyFTPFiles(client, SNLFiles, $"/{rootFolder}/{childFolder}/SimpleNeutrinoLoader", "InstallFiles/SimpleNeutrinoLoader"))
             {
                 Console.WriteLine($"Failed to install Simple Neutrino Loader to {rootFolder}");
                 MiscMethods.PauseExit(24);
@@ -114,12 +114,17 @@ namespace SNL_CLI
             return true;
         }
 
-        static bool VerifyFTPFiles(FtpClient client, List<string> files, string FTPPath)
+        static bool VerifyFTPFiles(FtpClient client, List<string> files, string FTPPath, string folder)
         {
             string tempDir = FTP.GetDir(client, FTPPath);
             foreach (string file in files)
             {
+                FileInfo fileInfo = new($"{folder}/{file}");
                 if (!tempDir.Contains(file))
+                {
+                    return false;
+                }
+                if (FTP.GetSize(client, FTPPath, file) != fileInfo.Length)
                 {
                     return false;
                 }
@@ -205,10 +210,10 @@ namespace SNL_CLI
             }
             FTP.UploadFile(client, "temp-BL-CFG.txt", configPath, configFile);
 
-            if (!VerifyFTPFiles(client, networkDrivers, configPath))
+            if (!VerifyFTPFiles(client, networkDrivers, configPath, "InstallFiles/NetworkDrivers"))
             {
                 InstallNetworkDrivers(client, configPath);
-                if (!VerifyFTPFiles(client, networkDrivers, configPath))
+                if (!VerifyFTPFiles(client, networkDrivers, configPath, "InstallFiles/NetworkDrivers"))
                 {
                     Console.WriteLine("Error: Failed to install network drivers.");
                     MiscMethods.PauseExit(83);

@@ -138,7 +138,7 @@ namespace SNL_CLI
             }
         }
 
-        static long GetSize(FtpClient client, string ftpPath, string file)
+        public static long GetSize(FtpClient client, string ftpPath, string file)
         {
             var ftpList = client.GetListing(ftpPath);
             Thread.Sleep(200);

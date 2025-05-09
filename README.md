@@ -5,7 +5,7 @@
 This is a PlayStation2 game loader that runs on the [Enceladus](https://github.com/DanielSant0s/Enceladus) Lua environment.  
 SNL is a highly customizable interface that runs [neutrino](https://github.com/rickgaiser/neutrino).  
 The full-install size (SNL, Enceladus, and all device drivers) is less than 1.4MB and can be installed on a memory card.  
-The Lua interface code totals to less than 300 lines which makes mods easy.  
+The Lua interface code totals to around 300 lines which makes mods easy.  
 LaunchELF's text editor paired with a USB keyboard allows changes to be made from the PS2 itself.  
 The included version of neutrino is modified to read files from the same directory avoiding the need for subfolders.  
 

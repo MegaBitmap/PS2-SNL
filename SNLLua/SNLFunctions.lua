@@ -24,6 +24,7 @@ function Debounce(pad)
 end
 
 function Scroll(i, waitDebounce)
+	IdleCounter = 0
 	ShowNeutrinoArgs = false
 	if waitDebounce then
 		DebounceActive = true
@@ -102,8 +103,30 @@ function ReadInput()
 	else
 		AnalogHeld = false
 		InputExit = 0
+		IdleCounter = IdleCounter + 1
+		if IdleCounter > 18000 then -- wait 5 minutes
+			ScreenSaver = true
+		end
 	end
 	PrevInput = pad
+end
+
+function ReadAnyInput()
+	local pad = Pads.get()
+	local lx, ly = Pads.getLeftStick()
+	local rx, ry = Pads.getRightStick()
+	if Pads.check(pad, PAD_SELECT) or Pads.check(pad, PAD_START) or Pads.check(pad, PAD_UP) or
+	Pads.check(pad, PAD_RIGHT) or Pads.check(pad, PAD_DOWN) or Pads.check(pad, PAD_LEFT) or
+	Pads.check(pad, PAD_TRIANGLE) or Pads.check(pad, PAD_CIRCLE) or Pads.check(pad, PAD_CROSS) or
+	Pads.check(pad, PAD_SQUARE) or Pads.check(pad, PAD_L1) or Pads.check(pad, PAD_R1) or
+	Pads.check(pad, PAD_L2) or Pads.check(pad, PAD_R2) or Pads.check(pad, PAD_L3) or
+	Pads.check(pad, PAD_R3) then
+		return true
+	end
+	if lx * lx > 3600 or ly * ly > 3600 or rx * rx > 3600 or ry * ry > 3600 then
+		return true
+	end
+	return false
 end
 
 function LoadList()
@@ -147,13 +170,18 @@ end
 
 function DrawList()
 	if TotalGames > 19 then
-		Font.ftPrint(MainFont, 250, 404, 0, 0, 0, "↓ view more ↓", FontColor)
+		Font.ftPrint(MainFont, 250, 408, 0, 0, 0, "↓ view more ↓", FontColor)
 	end
 	for item = 1, NumCurrentList do
 		local name, id = GameInfo(item + ScrollIndex)
 		if SelectedIndex == item then
-			Font.ftPrint(MainFont, 45, item * 20 + 10, 0, 0, 0, "→ "..name, HighlightColor)
-			Font.ftPrint(MainFont, 480, item * 20 + 10, 0, 0, 0, id.." ←", HighlightColor)
+			if IdleCounter % 90 > 45 then
+				Font.ftPrint(SelectFont, 35, item * 20 + 13, 0, 0, 0, "→ "..name, HighlightColor)
+				Font.ftPrint(MainFont, 480, item * 20 + 10, 0, 0, 0, id.." ←", HighlightColor)	
+			else
+				Font.ftPrint(SelectFont, 29, item * 20 + 13, 0, 0, 0, "→  "..name, HighlightColor)
+				Font.ftPrint(MainFont, 480, item * 20 + 10, 0, 0, 0, id.."  ←", HighlightColor)	
+			end
 		else
 			Font.ftPrint(MainFont, 60, item * 20 + 10, 0, 0, 0, name, FontColor)
 			Font.ftPrint(MainFont, 480, item * 20 + 10, 0, 0, 0, id, FontColor)
@@ -176,6 +204,35 @@ function LaunchELF()
 		System.loadELF("mc1:/BOOT/BOOT.ELF", 0)
 	else
 		System.exitToBrowser()
+	end
+end
+
+function DrawScreenSaver()
+	Screen.clear(FontColor)
+	ScreenSaverX = ScreenSaverX + VelX
+	ScreenSaverY = ScreenSaverY + VelY
+	if ScreenSaverX > 530 or ScreenSaverX < 5 then
+		VelX = -VelX
+	end
+	if ScreenSaverY > 428 or ScreenSaverY < 20 then
+		VelY = -VelY
+	end
+	Graphics.drawRect(ScreenSaverX - 5, ScreenSaverY - 20, 115, 40, HighlightColor)
+	Font.ftPrint(GiantFont, ScreenSaverX, ScreenSaverY, 0, 0, 0, "SNL", BackgroundColor)
+	Screen.flip()
+	Screen.waitVblankStart()
+end
+
+function DrawSine()
+	DrawOffset = DrawOffset + 1
+	if DrawOffset > 1280 then
+		DrawOffset = 0
+	end
+	for i = 0, 640, 2 do
+		local xPos = (640 - i)
+		local yPos = math.sin((i + DrawOffset) / 204) * (i + 1280) / 16 + 224
+		Graphics.drawRect(xPos, yPos - 90, 2, 180, SineOutline)
+		Graphics.drawRect(xPos, yPos - 80, 2, 160, SineColor)
 	end
 end
 

@@ -237,5 +237,5 @@ function DrawSine()
 end
 
 function IsNullOrEmpty(str)
-    return str == nil or str == ''
+    return str == nil or str == '' or str == '\r'
 end

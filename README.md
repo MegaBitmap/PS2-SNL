@@ -21,7 +21,8 @@ Hold SELECT to exit to browser.
 ## UDPBD Setup:
 
 The SNL-Manager application will automatically install Enceladus, SNL, and drivers for UDPBD gameplay.  
-SNL-Manager is only compatible with [PS2BBL](https://github.com/israpps/PlayStation2-Basic-BootLoader) version 1.2.0 and newer.  
+SNL-Manager is only compatible with [PS2BBL](https://github.com/israpps/PlayStation2-Basic-BootLoader) version 1.2.0 (Oct 5 2023) and newer.  
+To view which version of PS2BBL is installed, hold ⏹SQUARE during startup.  
 PS2BBL is needed to load network drivers on startup.  
 For help installing PS2BBL please [watch my tutorial](https://www.youtube.com/watch?v=k1rYXCFaD9Q).  
 

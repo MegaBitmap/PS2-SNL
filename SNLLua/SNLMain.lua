@@ -36,7 +36,7 @@ WaitSleep = 0
 ScreenSaverX = 50
 ScreenSaverY = 50
 VelX = 3
-VelY = 1
+VelY = 2
 DrawOffset = 0
 
 LoadList()

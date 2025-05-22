@@ -55,24 +55,24 @@ function StartGame(gameIndex)
 		LaunchELF()
 	end
 	local neutrinoArgs = {}
-	local columIndex = 1
-	for colum in GameList[gameIndex]:gmatch("[^|]+") do
-		if columIndex > 2 then
-			neutrinoArgs[columIndex - 2] = colum
+	local columnIndex = 1
+	for column in GameList[gameIndex]:gmatch("[^|]+") do
+		if columnIndex > 2 then
+			neutrinoArgs[columnIndex - 2] = column
 		end
-		columIndex = columIndex + 1
+		columnIndex = columnIndex + 1
 	end
 	System.loadELF(System.currentDirectory().."/neutrino.elf", 0, table.unpack(neutrinoArgs))
 end
 
 function PrintGameArgs(gameIndex)
 	local neutrinoArgs = {}
-	local columIndex = 1
-	for colum in GameList[gameIndex]:gmatch("[^|]+") do
-		if columIndex > 2 then
-			neutrinoArgs[columIndex - 2] = colum
+	local columnIndex = 1
+	for column in GameList[gameIndex]:gmatch("[^|]+") do
+		if columnIndex > 2 then
+			neutrinoArgs[columnIndex - 2] = column
 		end
-		columIndex = columIndex + 1
+		columnIndex = columnIndex + 1
 	end
 	NeutrinoArgs = table.concat(neutrinoArgs, " ")
 end
@@ -190,21 +190,16 @@ function DrawList()
 end
 
 function LaunchELF()
-	if doesFileExist("mc0:/BOOT/ULE.ELF") then
-		System.loadELF("mc0:/BOOT/ULE.ELF", 0)
-	elseif doesFileExist("mc1:/BOOT/ULE.ELF") then
-		System.loadELF("mc1:/BOOT/ULE.ELF", 0)
-	elseif doesFileExist("mc0:/APPS/ULE.ELF") then
-		System.loadELF("mc0:/APPS/ULE.ELF", 0)
-	elseif doesFileExist("mc1:/APPS/ULE.ELF") then
-		System.loadELF("mc1:/APPS/ULE.ELF", 0)
-	elseif doesFileExist("mc0:/BOOT/BOOT.ELF") then
-		System.loadELF("mc0:/BOOT/BOOT.ELF", 0)
-	elseif doesFileExist("mc1:/BOOT/BOOT.ELF") then
-		System.loadELF("mc1:/BOOT/BOOT.ELF", 0)
-	else
-		System.exitToBrowser()
+	local rootLocations = {"mc0:", "mc1:"}
+	local paths = {"/BOOT/ULE.ELF", "/APPS/ULE.ELF", "/BOOT/BOOT.ELF"}
+	for iPath = 1, #paths do
+		for iRoot = 1, #rootLocations do
+			if doesFileExist(rootLocations[iRoot]..paths[iPath]) then
+				System.loadELF(rootLocations[iRoot]..paths[iPath], 0)
+			end
+		end
 	end
+	System.exitToBrowser()
 end
 
 function DrawScreenSaver()

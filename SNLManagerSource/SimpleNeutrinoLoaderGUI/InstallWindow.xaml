@@ -45,7 +45,7 @@
                 The file 'mc?:/SYS-CONF/PS2BBL.INI' or 'mc?:/PS2BBL/CONFIG.INI' will be overwritten.
             </TextBlock>
             <Button x:Name="ButtonMC0" Content="Install to Memory Card Slot 1 (mc0)" IsEnabled="False" Grid.Column="1" Grid.Row="0" Margin="40" Click="ButtonMC0_Click"/>
-            <Button x:Name="ButtonMC1" Content="Install to Memory Card Slot 1 (mc1)" IsEnabled="False" Grid.Column="1" Grid.Row="1" Margin="40" Click="ButtonMC1_Click"/>
+            <Button x:Name="ButtonMC1" Content="Install to Memory Card Slot 2 (mc1)" IsEnabled="False" Grid.Column="1" Grid.Row="1" Margin="40" Click="ButtonMC1_Click"/>
             <Button x:Name="ButtonMass" Content="Install to USB Drive (mass)" IsEnabled="False" Grid.Column="1" Grid.Row="2" Margin="40" Click="ButtonMass_Click"/>
 
 

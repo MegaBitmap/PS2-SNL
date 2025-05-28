@@ -1,5 +1,8 @@
 
 
+-- Simple Neutrino Loader by MegaBitmap
+-- Get it free at https://github.com/MegaBitmap/PS2-SNL
+
 -- Screen.setMode(NTSC, 640, 448, CT24, INTERLACED, FIELD)
 -- Screen.setMode(_480p, 640, 448, CT24, NONINTERLACED, FRAME)
 
@@ -48,7 +51,7 @@ while true do
 	if ShowNeutrinoArgs then
 		Font.ftPrint(SmallFont, 20, 15, 0, 0, 0, NeutrinoArgs, HighlightColor)
 	else
-		Font.ftPrint(SmallFont, 402, 15, 0, 0, 0, "Simple Neutrino Loader v1.0.1.0", FontColor)
+		Font.ftPrint(SmallFont, 402, 15, 0, 0, 0, "Simple Neutrino Loader v1.0.1.1", FontColor)
 	end
 	if WaitSleep < 1 then
 		ReadInput()

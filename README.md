@@ -96,7 +96,7 @@ Now you are ready to play, run Enceladus or reboot the PS2.
 If you want the server to run automatically when the PC starts:  
 - Create a shortcut to `udpbd-vexfat.exe`
 - Right click the shortcut then select properties
-- In the `Target` text box add a space the location of the DVD and CD folders in quotes.  
+- In the `Target` text box add a space then the location to the DVD and CD folders in quotes.  
 Here is an example:
 ```
 "C:\Users\%USERNAME%\Documents\SNL-Manager\udpbd-vexfat.exe" "C:\Users\%USERNAME%\Documents\PS2 Games"

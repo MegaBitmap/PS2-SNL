@@ -92,14 +92,16 @@ namespace SNL_CLI
                 }
                 FileInfo fileInfo = new(filePath);
                 long ftpSize = GetSize(client, ftpPath, targetFile);
-                if (ftpSize != fileInfo.Length)
+                for (int i = 0; i < 3; i++) // Try 3 times to match the file size before throwing an error
                 {
-                    Console.WriteLine(fileInfo.Length);
-                    Console.WriteLine(ftpSize);
-                    Console.WriteLine($"Failed to upload file {filePath} to the PS2 via FTP.\nWrong file size.");
-                    client.Disconnect();
-                    MiscMethods.PauseExit(13);
+                    if (ftpSize == fileInfo.Length) { return; }
+                    ftpSize = GetSize(client, ftpPath, targetFile);
                 }
+                Console.WriteLine($"Target file size: {fileInfo.Length}");
+                Console.WriteLine($"File size reported by launchELF: {ftpSize}");
+                Console.WriteLine($"Failed to upload file {filePath} to the PS2 via FTP.\nWrong file size.");
+                client.Disconnect();
+                MiscMethods.PauseExit(13);
             }
             catch (Exception ex)
             {

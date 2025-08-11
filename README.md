@@ -250,11 +250,6 @@ Here is a list of all neutrino arguments:
                 - auto (elf file from cd/dvd) (default)
                 - <file>
 
--mt=<type>        Select media type, supported are:
-                - cd
-                - dvd
-                Defaults to cd for size<=650MiB, and dvd for size>650MiB
-
 -gc=<compat>      Game compatibility modes, supported are:
                 - 0: IOP: Fast reads (sceCdRead)
                 - 1: dummy
@@ -289,6 +284,7 @@ Here is a list of all neutrino arguments:
 
 -cwd=<path>       Change working directory
 -cfg=<file>       Load extra user/game specific config file (without .toml extension)
+-dbc              Enable debug colors
 -logo             Enable logo (adds rom0:PS2LOGO to arguments)
 -qb               Quick-Boot directly into load environment
 --b               Break, all following parameters are passed to the ELF

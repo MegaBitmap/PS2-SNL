@@ -6,11 +6,6 @@ namespace SNL_CLI
     internal class Install
     {
         readonly List<string> enceladusFiles = ["enceladus_pkd.elf", "helloworld.lua", "icon.icn", "icon.sys", "index.lua"];
-        readonly List<string> SNLFiles = ["bdm.irx", "bdmfs_fatfs.irx", "bsd-udpbd.toml", "bsdfs-exfat.toml", "cdvdfsv.irx",
-		"cdvdman_emu.irx", "dev9_hidden.irx", "eesync.irx", "ee_core.elf", "emu-dvd-file.toml", "emu-mc-file.toml", "fakemod.irx",
-		"fhi_bd_defrag.irx", "fileXio.irx", "Gudea-Bold.ttf", "icon.icn", "icon.sys", "imgdrv.irx", "iomanX.irx", "i_bdm.toml", "i_dev9_hidden.toml",
-		"mc_emu.irx", "neutrino.elf", "smap_udpbd.irx", "SNLFunctions.lua", "SNLMain.lua",
-		"system.toml", "udnl.irx", "version.txt"];
         readonly List<string> networkDrivers = ["ps2dev9.irx", "netman.irx", "smap.irx"];
 
         public void SNL(string installTarget, IPAddress ps2ip, bool modifyBootloader)
@@ -27,7 +22,7 @@ namespace SNL_CLI
                 MiscMethods.PauseExit(46);
             }
             if (!VerifyLocalFiles(enceladusFiles, "InstallFiles/Enceladus") ||
-                !VerifyLocalFiles(SNLFiles, "InstallFiles/SimpleNeutrinoLoader") ||
+                !VerifyLocalFiles(SNLFiles.Names(), "InstallFiles/SimpleNeutrinoLoader") ||
                 !VerifyLocalFiles(networkDrivers, "InstallFiles/NetworkDrivers"))
             {
                 Console.WriteLine("ERROR: One or more files from 'InstallFiles' are missing.");
@@ -62,7 +57,7 @@ namespace SNL_CLI
                 FTP.CreateDirectory(client, $"/{rootFolder}/{childFolder}/SimpleNeutrinoLoader");
                 InstallSNL(client, $"/{rootFolder}/{childFolder}/SimpleNeutrinoLoader/");
             }
-            else if (!VerifyFTPFiles(client, SNLFiles, $"/{rootFolder}/{childFolder}/SimpleNeutrinoLoader", "InstallFiles/SimpleNeutrinoLoader"))
+            else if (!VerifyFTPFiles(client, SNLFiles.Names(), $"/{rootFolder}/{childFolder}/SimpleNeutrinoLoader", "InstallFiles/SimpleNeutrinoLoader"))
             {
                 InstallSNL(client, $"/{rootFolder}/{childFolder}/SimpleNeutrinoLoader/");
             }
@@ -72,7 +67,7 @@ namespace SNL_CLI
                 Console.WriteLine($"Failed to install Enceladus to {rootFolder}");
                 MiscMethods.PauseExit(23);
             }
-            else if (!VerifyFTPFiles(client, SNLFiles, $"/{rootFolder}/{childFolder}/SimpleNeutrinoLoader", "InstallFiles/SimpleNeutrinoLoader"))
+            else if (!VerifyFTPFiles(client, SNLFiles.Names(), $"/{rootFolder}/{childFolder}/SimpleNeutrinoLoader", "InstallFiles/SimpleNeutrinoLoader"))
             {
                 Console.WriteLine($"Failed to install Simple Neutrino Loader to {rootFolder}");
                 MiscMethods.PauseExit(24);
@@ -107,7 +102,7 @@ namespace SNL_CLI
                 }
             }
             tempDir = FTP.GetDir(client, $"{FTPPath}/SimpleNeutrinoLoader");
-            foreach (string file in SNLFiles)
+            foreach (string file in SNLFiles.Names())
             {
                 if (!tempDir.Contains(file))
                 {
@@ -160,7 +155,7 @@ namespace SNL_CLI
         static void InstallSNL(FtpClient client, string folder)
         {
             Console.WriteLine("Starting installation of Simple Neutrino Loader . . .");
-            foreach (string file in SNLFiles)
+            foreach (string file in SNLFiles.Names())
             {
                 Console.WriteLine($"Installing {file} to {folder}{file} . . .");
                 FTP.UploadFile(client, $"InstallFiles/SimpleNeutrinoLoader/{file}", folder, file);

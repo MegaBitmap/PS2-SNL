@@ -16,6 +16,9 @@ namespace SNL_CLI
         public void SNL(string installTarget, IPAddress ps2ip, bool modifyBootloader)
         {
             FtpClient client = new(ps2ip.ToString());
+            client.Config.LogToConsole = false; // Set to true when debugging FTP commands
+            client.Config.DataConnectionType = FtpDataConnectionType.PASVEX;
+            client.Config.CheckCapabilities = false;
             string rootFolder = "mc";
             string childFolder = "0";
 
@@ -154,7 +157,7 @@ namespace SNL_CLI
             }
         }
 
-        void InstallSNL(FtpClient client, string folder)
+        static void InstallSNL(FtpClient client, string folder)
         {
             Console.WriteLine("Starting installation of Simple Neutrino Loader . . .");
             foreach (string file in SNLFiles)
@@ -224,32 +227,20 @@ namespace SNL_CLI
 
         static string GetBLConfig(FtpClient client)
         {
-            if (FTP.DirectoryExists(client, "/mc/0/SYS-CONF"))
+            List<string> folders = ["SYS-CONF", "PS2BBL"];
+            List<string> configFiles = ["PS2BBL.INI", "CONFIG.INI"];
+            foreach (string folder in folders)
             {
-                if (FTP.FileExists(client, "/mc/0/SYS-CONF", "PS2BBL.INI"))
+                for (int i = 0; i < 2; i++)
                 {
-                    return "/mc/0/SYS-CONF/";
-                }
-            }
-            if (FTP.DirectoryExists(client, "/mc/1/SYS-CONF"))
-            {
-                if (FTP.FileExists(client, "/mc/1/SYS-CONF", "PS2BBL.INI"))
-                {
-                    return "/mc/1/SYS-CONF/";
-                }
-            }
-            if (FTP.DirectoryExists(client, "/mc/0/PS2BBL"))
-            {
-                if (FTP.FileExists(client, "/mc/0/PS2BBL", "CONFIG.INI"))
-                {
-                    return "/mc/0/PS2BBL/";
-                }
-            }
-            if (FTP.DirectoryExists(client, "/mc/1/PS2BBL"))
-            {
-                if (FTP.FileExists(client, "/mc/1/PS2BBL", "CONFIG.INI"))
-                {
-                    return "/mc/1/PS2BBL/";
+                    string testFolder = $"/mc/{i}/{folder}";
+                    foreach (string configFile in configFiles)
+                    {
+                        if (FTP.FileExists(client, testFolder, configFile))
+                        {
+                            return testFolder + "/";
+                        }
+                    }
                 }
             }
             return "";

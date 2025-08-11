@@ -46,11 +46,10 @@ namespace SimpleNeutrinoLoaderGUI
             {
                 AsyncFtpClient client = new(TextBoxPS2IP.Text);
                 await client.Connect();
-                Thread.Sleep(200);
-                await client.GetListing();
-                Thread.Sleep(200);
+                await client.GetListing(); // for compatibility with ps2ftpd, reconnect every time FtpDataStream is used
+                await client.Disconnect();
+                await client.Connect();
                 locations = await Install.GetStorageDevices(client);
-                Thread.Sleep(200);
                 await client.Disconnect();
             }
             catch (Exception ex)
@@ -237,16 +236,24 @@ namespace SimpleNeutrinoLoaderGUI
             }
             try
             {
-                Ping pingSender = new();
-                PingReply reply = await pingSender.SendPingAsync(address, 6000);
-                if (!(reply.Status == IPStatus.Success))
+                bool pingSuccess = false;
+                for (int i = 0; i < 2; i++)
+                {
+                    Ping pingSender = new();
+                    PingReply reply = await pingSender.SendPingAsync(address, 6000);
+                    if (reply.Status == IPStatus.Success)
+                    {
+                        pingSuccess = true;
+                    }
+                }
+                if (!pingSuccess)
                 {
                     TextBlockConnection.Text = "Disconnected";
                     ButtonConnect.IsEnabled = true;
                     MessageBox.Show("Failed to receive a ping reply:\n\n" +
                         "Please verify that your network settings are configured properly and all cables are connected. " +
-                        "Try adjusting the IP address settings in launchELF.\n\n" +
-                        $"{reply.Status}", "Connection Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                        "Try adjusting the IP address settings in launchELF.\n\n",
+                        "Connection Failed", MessageBoxButton.OK, MessageBoxImage.Error);
                     return false;
                 }
             }
@@ -265,9 +272,7 @@ namespace SimpleNeutrinoLoaderGUI
             {
                 AsyncFtpClient client = new(address.ToString());
                 await client.Connect();
-                Thread.Sleep(200);
                 ftpList = await client.GetListing();
-                Thread.Sleep(200);
                 await client.Disconnect();
             }
             catch (Exception ex)
@@ -328,38 +333,34 @@ namespace SimpleNeutrinoLoaderGUI
 
         private void SaveIPSetting()
         {
-            TextWriter settings = new StreamWriter("IPSetting.cfg");
+            using TextWriter settings = new StreamWriter("IPSetting.cfg");
             settings.WriteLine(TextBoxPS2IP.Text);
-            settings.Close();
         }
 
         private void LoadIPSetting()
         {
             if (!File.Exists("IPSetting.cfg")) return;
-            TextReader settings = new StreamReader("IPSetting.cfg");
+            using TextReader settings = new StreamReader("IPSetting.cfg");
             string? tempIP = settings.ReadLine();
-            settings.Close();
             if (!string.IsNullOrEmpty(tempIP)) TextBoxPS2IP.Text = tempIP;
         }
 
         private void SaveGamePathSetting()
         {
-            TextWriter settings = new StreamWriter("GamePathSetting.cfg");
+            using TextWriter settings = new StreamWriter("GamePathSetting.cfg");
             settings.WriteLine(gamePath);
             if (CheckBoxVMC.IsChecked == true && ComboBoxServer.SelectedIndex == 1)
             {
                 settings.WriteLine("VMCServer");
             }
-            settings.Close();
         }
 
         private void LoadGamePathSetting()
         {
             if (!File.Exists("GamePathSetting.cfg")) return;
-            TextReader settings = new StreamReader("GamePathSetting.cfg");
+            using TextReader settings = new StreamReader("GamePathSetting.cfg");
             string? tempPath = settings.ReadLine();
             string? serveVMC = settings.ReadLine();
-            settings.Close();
             if (tempPath != null && Directory.Exists(tempPath))
             {
                 GetGameList(tempPath);
@@ -441,20 +442,29 @@ namespace SimpleNeutrinoLoaderGUI
 
         private void KillServer()
         {
-            string[] serverNames = ["udpbd-server", "udpbd-vexfat"];
+            string[] serverNames = ["UDPBDTray", "udpbd-server", "udpbd-vexfat"];
+            bool killAll = false;
             foreach (var server in serverNames)
             {
                 Process[] processes = Process.GetProcessesByName(server);
                 if (!(processes.Length == 0))
                 {
-                    MessageBoxResult response = MessageBox.Show("The server is currently running.\n" +
-                        "Click OK to stop the server and sync.", "The server is running", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-                    if (response == MessageBoxResult.OK)
+                    if (killAll)
                     {
                         foreach (var item in processes) item.Kill();
-                        ButtonStart.Content = "Start Server";
                     }
-                    else Environment.Exit(-1);
+                    else
+                    {
+                        MessageBoxResult response = MessageBox.Show("The server is currently running.\n" +
+                        "Click OK to stop the server and sync.", "The server is running", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+                        if (response == MessageBoxResult.OK)
+                        {
+                            killAll = true;
+                            foreach (var item in processes) item.Kill();
+                            ButtonStart.Content = "Start Server";
+                        }
+                        else Environment.Exit(-1);
+                    }
                 }
             }
         }
@@ -462,7 +472,7 @@ namespace SimpleNeutrinoLoaderGUI
         private static void QuickKillServer()
         {
             bool hasKilled = false;
-            string[] serverNames = ["udpbd-server", "udpbd-vexfat"];
+            string[] serverNames = ["UDPBDTray", "udpbd-server", "udpbd-vexfat"];
             foreach (var server in serverNames)
             {
                 Process[] processes = Process.GetProcessesByName(server);

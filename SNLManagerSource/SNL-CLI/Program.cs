@@ -84,6 +84,9 @@ namespace SNL_CLI
             CreateGameList(gamePath, gameList);
 
             FtpClient client = new(ps2ip.ToString());
+            client.Config.LogToConsole = false; // Set to true when debugging FTP commands
+            client.Config.DataConnectionType = FtpDataConnectionType.PASVEX;
+            client.Config.CheckCapabilities = false;
 
             if (!FTP.TestConnection(client, ps2ip))
             {
@@ -141,20 +144,41 @@ namespace SNL_CLI
 
         static string GetInstallLocation(FtpClient client)
         {
+            int numTargets = 0;
+            List<string> targets = [];
             Install install = new();
             if (install.VerifyInstallation(client, "/mc/0"))
             {
-                return "/mc/0";
+                numTargets++;
+                targets.Add("/mc/0");
             }
-            else if (install.VerifyInstallation(client, "/mc/1"))
+            if (install.VerifyInstallation(client, "/mc/1"))
             {
-                return "/mc/1";
+                numTargets++;
+                targets.Add("/mc/1");
             }
-            else if (install.VerifyInstallation(client, "/mass/0"))
+            if (install.VerifyInstallation(client, "/mass/0"))
             {
-                return "/mass/0";
+                numTargets++;
+                targets.Add("/mass/0");
             }
-            return "";
+            if (numTargets < 1) { return ""; }
+            else if (numTargets == 1) { return targets.First(); }
+            else
+            {
+                while (true)
+                {
+                    Console.WriteLine("Found multiple installations.\r\n" +
+                        "Please type the desired sync target:\r\n" +
+                        string.Join(" or ", targets));
+                    string? userInput = Console.ReadLine();
+                    if (string.IsNullOrEmpty(userInput) || userInput != "/mc/0" && userInput != "/mc/1" && userInput != "/mass/0")
+                    {
+                        Console.WriteLine("Invalid Input, Please try again.");
+                    }
+                    else { return userInput; }
+                }
+            }
         }
 
         static string ParseInstallLocation(string target)

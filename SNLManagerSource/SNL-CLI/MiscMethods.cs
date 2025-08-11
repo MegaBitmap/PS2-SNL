@@ -80,7 +80,7 @@ namespace SNL_CLI
 
         public static bool KillServer()
         {
-            string[] serverNames = ["udpbd-server", "udpbd-vexfat"];
+            string[] serverNames = ["UDPBDTray", "udpbd-server", "udpbd-vexfat"];
             foreach (var server in serverNames)
             {
                 Process[] processes = Process.GetProcessesByName(server);

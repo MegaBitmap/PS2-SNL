@@ -9,10 +9,11 @@
 dofile("SNLFunctions.lua");
 
 HighlightColor = Color.new(0, 69, 0) -- dark green
-BackgroundColor = Color.new(255, 255, 255) -- white
+BackgroundColor = Color.new(255, 240, 50) -- yellow
 FontColor = Color.new(0, 0, 0) -- black
-SineColor = Color.new(200, 210, 255) -- light blue
-SineOutline = Color.new(220, 230, 255) -- lighter blue
+SineColor = Color.new(255, 180, 50) -- orange
+SineOutline = Color.new(255, 210, 50) -- light orange
+SineOutline2 = Color.new(255, 230, 50) -- lighter orange
 
 Font.ftInit()
 MainFont = Font.ftLoad("Gudea-Bold.ttf")
@@ -31,6 +32,7 @@ InputHeld = 0
 InputExit = 0
 AnalogHeld = false
 NumCurrentList = 19
+ListSpacing = 10
 NeutrinoArgs = ""
 ShowNeutrinoArgs = false
 ScreenSaver = false

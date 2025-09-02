@@ -145,6 +145,7 @@ function LoadList()
 	GameList[TotalGames] = "Exit to LaunchELF"
 	if TotalGames < 19 then
 		NumCurrentList = TotalGames
+		ListSpacing = (20 - NumCurrentList) * 10
 	end
 end
 
@@ -156,7 +157,7 @@ function GameInfo(i)
 		if lineIndex == 1 then
 			gameName = item
 		elseif lineIndex == 2 then
-			gameId = item
+			gameId = item:gsub("%.", ""):gsub("_", "-")
 		end
 		lineIndex = lineIndex + 1
 	end
@@ -171,15 +172,15 @@ function DrawList()
 		local name, id = GameInfo(item + ScrollIndex)
 		if SelectedIndex == item then
 			if IdleCounter % 90 > 45 then
-				Font.ftPrint(SelectFont, 35, item * 20 + 13, 0, 0, 0, "→ "..name, HighlightColor)
-				Font.ftPrint(MainFont, 480, item * 20 + 10, 0, 0, 0, id.." ←", HighlightColor)	
+				Font.ftPrint(SelectFont, 35, item * 20 + ListSpacing + 3, 0, 0, 0, "→ "..name, HighlightColor)
+				Font.ftPrint(MainFont, 480, item * 20 + ListSpacing, 0, 0, 0, id.." ←", HighlightColor)	
 			else
-				Font.ftPrint(SelectFont, 29, item * 20 + 13, 0, 0, 0, "→  "..name, HighlightColor)
-				Font.ftPrint(MainFont, 480, item * 20 + 10, 0, 0, 0, id.."  ←", HighlightColor)	
+				Font.ftPrint(SelectFont, 29, item * 20 + ListSpacing + 3, 0, 0, 0, "→  "..name, HighlightColor)
+				Font.ftPrint(MainFont, 480, item * 20 + ListSpacing, 0, 0, 0, id.."  ←", HighlightColor)	
 			end
 		else
-			Font.ftPrint(MainFont, 60, item * 20 + 10, 0, 0, 0, name, FontColor)
-			Font.ftPrint(MainFont, 480, item * 20 + 10, 0, 0, 0, id, FontColor)
+			Font.ftPrint(MainFont, 60, item * 20 + ListSpacing, 0, 0, 0, name, FontColor)
+			Font.ftPrint(MainFont, 480, item * 20 + ListSpacing, 0, 0, 0, id, FontColor)
 		end
 	end
 end
@@ -215,14 +216,15 @@ end
 
 function DrawSine()
 	DrawOffset = DrawOffset + 1
-	if DrawOffset > 1280 then
+	if DrawOffset > 942 then
 		DrawOffset = 0
 	end
 	for i = 0, 640, 2 do
 		local xPos = (640 - i)
-		local yPos = math.sin((i + DrawOffset) / 204) * (i + 1280) / 16 + 224
-		Graphics.drawRect(xPos, yPos - 90, 2, 180, SineOutline)
-		Graphics.drawRect(xPos, yPos - 80, 2, 160, SineColor)
+		local yPos = math.sin((i + DrawOffset) / 150) * (i / 8 + 20) + 224
+		Graphics.drawRect(xPos, yPos, 2, 80, SineOutline)
+		Graphics.drawRect(xPos, yPos - 80, 2, 80, SineOutline2)
+		Graphics.drawRect(xPos, yPos + 80, 2, 250, SineColor)
 	end
 end
 

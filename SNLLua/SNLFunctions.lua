@@ -115,12 +115,7 @@ function ReadAnyInput()
 	local pad = Pads.get()
 	local lx, ly = Pads.getLeftStick()
 	local rx, ry = Pads.getRightStick()
-	if Pads.check(pad, PAD_SELECT) or Pads.check(pad, PAD_START) or Pads.check(pad, PAD_UP) or
-	Pads.check(pad, PAD_RIGHT) or Pads.check(pad, PAD_DOWN) or Pads.check(pad, PAD_LEFT) or
-	Pads.check(pad, PAD_TRIANGLE) or Pads.check(pad, PAD_CIRCLE) or Pads.check(pad, PAD_CROSS) or
-	Pads.check(pad, PAD_SQUARE) or Pads.check(pad, PAD_L1) or Pads.check(pad, PAD_R1) or
-	Pads.check(pad, PAD_L2) or Pads.check(pad, PAD_R2) or Pads.check(pad, PAD_L3) or
-	Pads.check(pad, PAD_R3) then
+	if pad ~= 0 then
 		return true
 	end
 	if lx * lx > 3600 or ly * ly > 3600 or rx * rx > 3600 or ry * ry > 3600 then

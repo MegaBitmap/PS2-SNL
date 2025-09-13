@@ -29,10 +29,6 @@ For help installing PS2BBL please [watch my tutorial](https://www.youtube.com/wa
 To save 210KB of space SNL-Manager only includes drivers for UDPBD.  
 For HDD, HDL, ILINK, MMCE, MX4, or USB use the SNL-Full release.  
 
-Somewhere on your PC, for example Documents, create a new folder PS2.  
-Inside the PS2 folder, create CD and DVD folders.  
-Rip/copy any PlayStation 2 ISOs you wish to play into the DVD or CD folder.  
-SNL-Manager can automatically convert Bin+Cue files to ISO if the box is checked then Synced.  
 Download SNL-Manager from [here](https://github.com/MegaBitmap/PS2-SNL/releases).  
 Extract the SNL-Manager folder to the Desktop or Documents.  
 It is a portable app, do NOT use Program Files or any other system related folder.  
@@ -68,7 +64,7 @@ Let the PS2 idle on this screen for the next steps on the PC.
 ### Windows Setup:
 
 **If you plan to use virtual memory cards please read this:**  
-Before syncing with SNL-Manager change vexfat to udpbd-server then check "use vmcs" then sync to the PS2.  
+In the SNL-Manager select udpbd-server then check "use vmcs" then sync to the PS2.  
 You must use udpbd-server when using VMCs, udpbd-vexfat does NOT support VMCs.  
 AFAIK udpbd-server only works with exFAT partitions made with Linux/exfatprogs/GParted.  
 The beginning of a [previous tutorial](https://www.youtube.com/watch?v=F6Ffg5DlKC4) shows how to do this.  
@@ -77,6 +73,13 @@ Rip/copy any PlayStation 2 disc images you wish to load into the folder that cor
 Example:  `%USERPROFILE%/Documents/PS2 Games/DVD/Grand Theft Auto III.iso`  
 
 Start the SNL Manager app (SimpleNeutrinoLoaderGUI.exe).  
+If no exFAT partitions are found, a prompt will appear to mount a virtual exFAT drive.  
+Rip/copy any PlayStation 2 disc images you wish to load into the DVD or CD folder.  
+Example:  `E:/DVD/Grand Theft Auto III.iso`  
+The app can automatically convert Bin+Cue files to ISO if the box is checked then Synced.  
+If you are using udpbd-vexfat, a regular folder can be used instead.  
+For example in Documents, create a new folder PS2.  
+Example:  `%USERPROFILE%/Documents/PS2 Games/DVD/Grand Theft Auto III.iso`  
 Type in the IP address and click Connect.  
 ![mainWindow](readmeImages/mainWindow.jpg)  
 Then click Install to PS2 and choose the target.  
@@ -93,19 +96,14 @@ The server needs to be open and running for the entire play session (Disable sle
 Now you are ready to play, run Enceladus or reboot the PS2.  
 ![snl](readmeImages/snl.jpg)  
 
-If you want the server to run automatically when the PC starts:  
-- Create a shortcut to `udpbd-vexfat.exe`
-- Right click the shortcut then select properties
-- In the `Target` text box add a space then the location to the DVD and CD folders in quotes.  
-Here is an example:
-```
-"C:\Users\%USERNAME%\Documents\SNL-Manager\udpbd-vexfat.exe" "C:\Users\%USERNAME%\Documents\PS2 Games"
-```
-- Now test the shortcut and check if the server is able to find games.  
-If the server exits immediately then there is most likely a typo in the shortcut's target.  
-- Move the vexfat shortcut to this folder:  
+If you want the server to start automatically when the PC is turned on follow these steps:
+
+- Right Click `UDPBDTray.exe` → Show more → Create Shortcut
+- Move the UDPBDTray shortcut to this folder:  
 `C:\Users\%USERNAME%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup`  
 Now the server will start automatically.  
+
+UDPBDTray adds a notification tray icon with controls for stopping and restarting the server as well starting ps2client for console output debugging.
 
 ### Linux Setup:
 
@@ -307,6 +305,9 @@ https://github.com/DanielSant0s/Enceladus
 
 Matías Israelson - PS2-Basic-Bootloader  
 https://github.com/israpps/PlayStation2-Basic-BootLoader  
+
+PS2Dev Team - ps2client  
+https://github.com/ps2dev/ps2client  
 
 Rick Gaiser - neutrino  
 https://github.com/rickgaiser/neutrino  

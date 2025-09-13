@@ -61,29 +61,29 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBox x:Name="TextBoxPS2IP" Text="192.168.0.10" Margin="30,0,30,0" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="0"/>
-                <Button x:Name="ButtonConnect" Content="Connect to PS2Net" Margin="30,0,30,0" Grid.Row="1" Click="ButtonConnect_Click"/>
+                <Button x:Name="ButtonConnect" Content="Connect to PS2Net" Margin="30,0,30,0" Grid.Row="1" Click="ButtonConnect_ClickAsync"/>
                 <TextBlock x:Name="TextBlockConnection" Text="Disconnected" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="30,0,30,0" Grid.Row="2"/>
             </Grid>
-            <Button x:Name="ButtonInstall" Content="Install to PS2" Margin="30,40,30,40" Grid.Row="1" Grid.Column="2" Click="ButtonInstall_Click"/>
+            <Button x:Name="ButtonInstall" Content="Install to PS2" Margin="30,40,30,40" Grid.Row="1" Grid.Column="2" Click="ButtonInstall_ClickAsync"/>
             <Grid Grid.Row="2" Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <ComboBox x:Name="ComboBoxServer" FontWeight="Bold" Margin="30,10,30,0" SelectedIndex="0" VerticalAlignment="Center" Grid.Row="0" SelectionChanged="ComboBoxServer_SelectionChanged">
-                    <ComboBoxItem x:Name="udpbdVexfat" Content="UDPBD-VexFAT (Easy)"/>
-                    <ComboBoxItem x:Name="udpbdServer" Content="UDPBD-Server (Expert)"/>
+                <ComboBox x:Name="ComboBoxServer" FontWeight="Bold" Margin="30,10,30,0" SelectedIndex="0" VerticalAlignment="Center" Grid.Row="0" SelectionChanged="ComboBoxServer_SelectionChangedAsync">
+                    <ComboBoxItem x:Name="udpbdServer" Content="UDPBD-Server"/>
+                    <ComboBoxItem x:Name="udpbdVexfat" Content="UDPBD-VexFAT (read-only)"/>
                 </ComboBox>
-                <Button x:Name="ButtonGamePath" Content="Select Game Path" Margin="30,0,30,20" Grid.Row="1" Click="ButtonGamePath_Click"/>
-                <TextBlock x:Name="ServerNote" Text="The exFAT partition needs to be created in Linux. See README for more details." Visibility="Hidden" FontSize="14" TextAlignment="Center" TextWrapping="Wrap"  Margin="0,0,0,20" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"  Grid.Row="1"/>
+                <Button x:Name="ButtonGamePath" Visibility="Hidden" Content="Select Game Path" Margin="30,0,30,20" Grid.Row="1" Click="ButtonGamePath_Click"/>
+                <TextBlock x:Name="ServerNote" Text="Select an exFAT partition:" FontSize="14" TextAlignment="Center" TextWrapping="Wrap"  Margin="0,0,0,20" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"  Grid.Row="1"/>
             </Grid>
             <Grid Grid.Row="2" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock x:Name="TextBlockGamesLoaded" Text="" Margin="0,10,0,0" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="0"/>
-                <ComboBox x:Name="ComboBoxGameVolume" Visibility="Hidden" FontWeight="Bold" Margin="0,10,0,0" VerticalAlignment="Center" Grid.Row="0"/>
+                <TextBlock x:Name="TextBlockGamesLoaded" Visibility="Hidden" Text="" Margin="0,10,0,0" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="0"/>
+                <ComboBox x:Name="ComboBoxGameVolume" FontWeight="Bold" Margin="0,10,0,0" VerticalAlignment="Center" Grid.Row="0"/>
                 <CheckBox x:Name="CheckBoxBinConvert" Content="Convert CD Bin to ISO" IsChecked="True" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="4,-4,0,0" Margin="0,0,0,10" Grid.Row="1"/>
             </Grid>
             <Grid Grid.Row="2" Grid.Column="2">
@@ -91,7 +91,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <CheckBox x:Name="CheckBoxVMC" Visibility="Hidden" Content="Use Virtual Memory Cards" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="4,-4,0,0" Margin="0,10,0,0" Grid.Row="0"/>
+                <CheckBox x:Name="CheckBoxVMC" Content="Use Virtual Memory Cards" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="4,-4,0,0" Margin="0,10,0,0" Grid.Row="0"/>
                 <Button x:Name="ButtonSync" Content="Sync with PS2" Margin="30,0,30,20" Grid.Row="2" Grid.Column="2" Click="ButtonSync_Click"/>
             </Grid>
             <Button x:Name="ButtonHelp" Content="View Help" Margin="30,60,30,20" Grid.Row="3" Grid.Column="0" Click="ButtonHelp_Click"/>
@@ -101,7 +101,6 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <CheckBox x:Name="CheckBoxConsole" Content="Show Console" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="4,-4,0,0" Margin="0,10,0,0" Grid.Row="0" Checked="CheckBoxConsole_Checked"/>
                 <Button x:Name="ButtonStart" Content="Start Server" Margin="30,0,30,20" Grid.Row="1" Click="ButtonStart_Click"/>
             </Grid>
         </Grid>

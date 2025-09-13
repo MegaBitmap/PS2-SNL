@@ -14,6 +14,7 @@ FontColor = Color.new(0, 0, 0) -- black
 SineColor = Color.new(255, 180, 50) -- orange
 SineOutline = Color.new(255, 210, 50) -- light orange
 SineOutline2 = Color.new(255, 230, 50) -- lighter orange
+SSFontColor = Color.new(255, 255, 255) -- white
 
 Font.ftInit()
 MainFont = Font.ftLoad("Gudea-Bold.ttf")
@@ -53,7 +54,7 @@ while true do
 	if ShowNeutrinoArgs then
 		Font.ftPrint(SmallFont, 20, 15, 0, 0, 0, NeutrinoArgs, HighlightColor)
 	else
-		Font.ftPrint(SmallFont, 402, 15, 0, 0, 0, "Simple Neutrino Loader v1.0.3.0", FontColor)
+		Font.ftPrint(SmallFont, 402, 15, 0, 0, 0, "Simple Neutrino Loader v1.0.4.0", FontColor)
 	end
 	if WaitSleep < 1 then
 		ReadInput()

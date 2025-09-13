@@ -34,7 +34,7 @@ namespace SNL_CLI
                 try
                 {
                     Ping pingSender = new();
-                    PingReply reply = pingSender.Send(ps2ip, 6000);
+                    PingReply reply = pingSender.Send(ps2ip, 3000);
                     if (reply.Status == IPStatus.Success)
                     {
                         return true;

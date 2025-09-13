@@ -209,7 +209,7 @@ function DrawScreenSaver()
 		VelY = -VelY
 	end
 	Graphics.drawRect(ScreenSaverX - 5, ScreenSaverY - 20, 115, 40, HighlightColor)
-	Font.ftPrint(GiantFont, ScreenSaverX, ScreenSaverY, 0, 0, 0, "SNL", BackgroundColor)
+	Font.ftPrint(GiantFont, ScreenSaverX, ScreenSaverY, 0, 0, 0, "SNL", SSFontColor)
 	Screen.flip()
 	Screen.waitVblankStart()
 end
@@ -221,10 +221,10 @@ function DrawSine()
 	end
 	for i = 0, 640, 2 do
 		local xPos = (640 - i)
-		local yPos = math.sin((i + DrawOffset) / 150) * (i / 8 + 20) + 224
-		Graphics.drawRect(xPos, yPos, 2, 80, SineOutline)
-		Graphics.drawRect(xPos, yPos - 80, 2, 80, SineOutline2)
-		Graphics.drawRect(xPos, yPos + 80, 2, 250, SineColor)
+		local yPos = math.sin((i + DrawOffset) / 150) * (i / 16 + 40)
+		Graphics.drawRect(xPos, yPos + 140, 2, 80, SineOutline2)
+		Graphics.drawRect(xPos, yPos + 220, 2, 80, SineOutline)
+		Graphics.drawRect(xPos, yPos + 300, 2, 230, SineColor)
 	end
 end
 

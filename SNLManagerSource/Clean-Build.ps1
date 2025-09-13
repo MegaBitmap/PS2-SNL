@@ -1,8 +1,20 @@
 
+$DelPaths = @(
+".\SimpleNeutrinoLoaderGUI\bin"
+".\SimpleNeutrinoLoaderGUI\obj"
+".\SNL-CLI\bin"
+".\SNL-CLI\obj"
+".\UDPBDTray\bin"
+".\UDPBDTray\obj"
+".\udpbd-vexfat"
+".\udpbd-server"
+)
 
-Remove-Item -Path .\SimpleNeutrinoLoaderGUI\bin -Recurse
-Remove-Item -Path .\SimpleNeutrinoLoaderGUI\obj -Recurse
-Remove-Item -Path .\SNL-CLI\bin -Recurse
-Remove-Item -Path .\SNL-CLI\obj -Recurse
-Remove-Item -Path .\SNL-CLI\Properties -Recurse
+foreach ($delPath in $DelPaths)
+{
+    if (Test-Path $delPath)
+    {
+        Remove-Item -Path $delPath -Recurse
+    }
+}
 

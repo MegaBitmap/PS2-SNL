@@ -66,11 +66,8 @@ Let the PS2 idle on this screen for the next steps on the PC.
 **If you plan to use virtual memory cards please read this:**  
 In the SNL-Manager select udpbd-server then check "use vmcs" then sync to the PS2.  
 You must use udpbd-server when using VMCs, udpbd-vexfat does NOT support VMCs.  
-AFAIK udpbd-server only works with exFAT partitions made with Linux/exfatprogs/GParted.  
-The beginning of a [previous tutorial](https://www.youtube.com/watch?v=F6Ffg5DlKC4) shows how to do this.  
-
-Rip/copy any PlayStation 2 disc images you wish to load into the folder that corresponds with their original source media.  
-Example:  `%USERPROFILE%/Documents/PS2 Games/DVD/Grand Theft Auto III.iso`  
+udpbd-server only works with exFAT partitions.  
+A preformatted virtual exFAT drive can be mounted if no exFAT partition is found.  
 
 Start the SNL Manager app (SimpleNeutrinoLoaderGUI.exe).  
 If no exFAT partitions are found, a prompt will appear to mount a virtual exFAT drive.  

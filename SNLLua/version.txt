@@ -2,4 +2,4 @@ SimpleNeutrinoLoader:
 v1.0.4.0
 
 neutrino:
-v1.7.0-24-g9bc1ef6-singleFolder
+v1.7.0-30-g607309e-singleFolder

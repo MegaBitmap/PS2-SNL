@@ -54,21 +54,13 @@ while true do
 	if ShowNeutrinoArgs then
 		Font.ftPrint(SmallFont, 20, 15, 0, 0, 0, NeutrinoArgs, HighlightColor)
 	else
-		Font.ftPrint(SmallFont, 402, 15, 0, 0, 0, "Simple Neutrino Loader v1.0.4.0", FontColor)
+		Font.ftPrint(SmallFont, 402, 15, 0, 0, 0, "Simple Neutrino Loader v1.0.4.1", FontColor)
 	end
-	if WaitSleep < 1 then
-		ReadInput()
-	else
-		WaitSleep = WaitSleep - 1
-	end
+	ReadInput()
+
 	DrawList()
 
 	while ScreenSaver do
-		if ReadAnyInput() then
-			ScreenSaver = false
-			IdleCounter = 0
-			WaitSleep = 60
-		end
 		DrawScreenSaver()
 	end
 	-- Font.ftPrint(SmallFont, 20, 15, 0, 0, 0, Screen.getFPS(80).." FPS", FontColor)

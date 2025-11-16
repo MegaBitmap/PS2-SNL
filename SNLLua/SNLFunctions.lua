@@ -78,6 +78,10 @@ function PrintGameArgs(gameIndex)
 end
 
 function ReadInput()
+	if WaitSleep > 0 then
+		WaitSleep = WaitSleep - 1
+		return
+	end
 	local pad = Pads.get()
 	local lx, ly = Pads.getLeftStick()
 	local waitDebounce = Debounce(pad)
@@ -199,6 +203,12 @@ function LaunchELF()
 end
 
 function DrawScreenSaver()
+	if ReadAnyInput() then
+		ScreenSaver = false
+		IdleCounter = 0
+		WaitSleep = 60
+		return
+	end
 	Screen.clear(FontColor)
 	ScreenSaverX = ScreenSaverX + VelX
 	ScreenSaverY = ScreenSaverY + VelY

@@ -35,8 +35,8 @@
             {
                 fileIn.Position = sectorIndex * sector_raw_size;
                 byte[] header = new byte[16];
-                fileIn.Read(header, 0, header.Length);
-                if (header[0..12].SequenceEqual(CDROMHeaderReference)) return "data";
+                fileIn.ReadExactly(header);
+                if (header.AsSpan()[0..12].SequenceEqual(CDROMHeaderReference)) return "data";
             }
             return "";
         }
@@ -55,8 +55,8 @@
             {
                 fileIn.Position = sectorIndex * sector_raw_size;
                 byte[] header = new byte[16];
-                fileIn.Read(header, 0, header.Length);
-                if (header[0..12].SequenceEqual(CDROMHeaderReference))
+                fileIn.ReadExactly(header);
+                if (header.AsSpan()[0..12].SequenceEqual(CDROMHeaderReference))
                 {
                     int mode = header[15];
                     if (mode == 1) sector_offset = 16;
@@ -65,7 +65,7 @@
 
                     fileIn.Position = sectorIndex * sector_raw_size + sector_offset;
                     byte[] dataOut = new byte[sector_target_size];
-                    fileIn.Read(dataOut, 0, dataOut.Length);
+                    fileIn.ReadExactly(dataOut);
                     fileOutISO.Write(dataOut, 0, dataOut.Length);
                 }
             }

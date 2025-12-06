@@ -4,6 +4,7 @@
 
 This is a PlayStation2 game loader that runs on the [Enceladus](https://github.com/DanielSant0s/Enceladus) Lua environment.  
 SNL is a highly customizable interface that runs [neutrino](https://github.com/rickgaiser/neutrino).  
+To use this software you will need a ps2 capable of running homebrew, such as FreeMCBoot or PS2BBL.  
 The full-install size (SNL, Enceladus, and all device drivers) is less than 1.4MB and can be installed on a memory card.  
 The Lua interface code totals to around 300 lines which makes mods easy.  
 LaunchELF's text editor paired with a USB keyboard allows changes to be made from the PS2 itself.  
@@ -21,10 +22,6 @@ Hold SELECT to exit to browser.
 ## UDPBD Setup:
 
 The SNL-Manager application will automatically install Enceladus, SNL, and drivers for UDPBD gameplay.  
-SNL-Manager is only compatible with [PS2BBL](https://github.com/israpps/PlayStation2-Basic-BootLoader) version 1.2.0 (Oct 5 2023) and newer.  
-To view which version of PS2BBL is installed, hold ⏹SQUARE during startup.  
-PS2BBL is needed to load network drivers on startup.  
-For help installing PS2BBL please [watch my tutorial](https://www.youtube.com/watch?v=k1rYXCFaD9Q).  
 
 To save 210KB of space SNL-Manager only includes drivers for UDPBD.  
 For HDD, HDL, ILINK, MMCE, MX4, or USB use the SNL-Full release.  
@@ -88,7 +85,9 @@ Then select your game folder and Sync with PS2.
 Click Start Server and make sure to allow.  
 ![udpbd-vexfat-firewall](readmeImages/udpbd-vexfat-firewall.jpg)  
 If you miss clicked, either move the SNL-Manager folder inside a new folder or manually delete the inbound rules for udpbd-vexfat in 'Windows Defender Firewall with Advanced Security'.  
-udpbd-vexfat is started as a separate process, SNL-Manager can be closed and the server will run in the background.  
+This will start the UDPBDTray notification tray icon which runs the server itself.  
+UDPBDTray is used to show/hide console output, open the manager app, or shutdown the server.  
+After UDPBDTray is started SNL-Manager can be closed.  
 The server needs to be open and running for the entire play session (Disable sleep on the PC).  
 Now you are ready to play, run Enceladus or reboot the PS2.  
 ![snl](readmeImages/snl.jpg)  
@@ -100,7 +99,6 @@ If you want the server to start automatically when the PC is turned on follow th
 `C:\Users\%USERNAME%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup`  
 Now the server will start automatically.  
 
-UDPBDTray adds a notification tray icon with controls for stopping and restarting the server as well starting ps2client for console output debugging.
 
 ### Linux Setup:
 
@@ -136,7 +134,7 @@ Please note the IP address settings and change the following commands accordingl
 `dotnet SNL-CLI.dll -install mc0 -ps2ip 192.168.0.10 -boot`  
 -install '?' will install Enceladus, neutrino, and SNL to the specified device (mc0, mc1, or mass).  
 -ps2ip '?' is the ip address for connecting to the PS2 with PS2Net.  
--boot will modify basic-boot-loader to load network drivers on boot and auto-run SNL.  
+-boot will modify basic-boot-loader to auto-run SNL.  
 
 Next sync the game list, note that 'enablevmc' is optional.  
 `dotnet SNL-CLI.dll -path '/mnt/ps2' -ps2ip 192.168.0.10 -bin2iso -enablevmc`  

@@ -30,23 +30,25 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition  Width="3*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock  Margin="20,30,0,30" Background="WhiteSmoke" TextWrapping="WrapWithOverflow" Grid.RowSpan="3">
+            <TextBlock  Margin="20,30,0,30" Background="WhiteSmoke" TextWrapping="WrapWithOverflow" Grid.RowSpan="4">
                 Select which storage device you would like to install Simple Neutrino Loader and Enceladus to.<LineBreak/><LineBreak/>
                 ****PLEASE NOTE****<LineBreak/>
                 <Bold>The MC MUST have 1.2MB (1,200KB)<LineBreak/>
                 or more free unused space available.</Bold><LineBreak/>
                 ****PLEASE NOTE****<LineBreak/><LineBreak/>
-                The settings for PS2-Basic-Bootloader will be updated to autoload network drivers and autorun SNL.<LineBreak/>
-                The file 'mc?:/SYS-CONF/PS2BBL.INI' or 'mc?:/PS2BBL/CONFIG.INI' will be overwritten.
+                If checked the settings for PS2-Basic-Bootloader will be updated to autorun SNL.
+                This will replace the file 'mc?:/SYS-CONF/PS2BBL.INI' or 'mc?:/PS2BBL/CONFIG.INI'.
             </TextBlock>
-            <Button x:Name="ButtonMC0" Content="Install to Memory Card Slot 1 (mc0)" IsEnabled="False" Grid.Column="1" Grid.Row="0" Margin="40" Click="ButtonMC0_Click"/>
-            <Button x:Name="ButtonMC1" Content="Install to Memory Card Slot 2 (mc1)" IsEnabled="False" Grid.Column="1" Grid.Row="1" Margin="40" Click="ButtonMC1_Click"/>
-            <Button x:Name="ButtonMass" Content="Install to USB Drive (mass)" IsEnabled="False" Grid.Column="1" Grid.Row="2" Margin="40" Click="ButtonMass_Click"/>
+            <CheckBox x:Name="CheckBoxAutorun" Content="Set PS2BBL to automatically run SNL" IsChecked="True" VerticalAlignment="Bottom" FontWeight="Bold" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="0"/>
+            <Button x:Name="ButtonMC0" Content="Install to Memory Card Slot 1 (mc0)" IsEnabled="False" Grid.Column="1" Grid.Row="1" Margin="40,30" Click="ButtonMC0_Click"/>
+            <Button x:Name="ButtonMC1" Content="Install to Memory Card Slot 2 (mc1)" IsEnabled="False" Grid.Column="1" Grid.Row="2" Margin="40,30" Click="ButtonMC1_Click"/>
+            <Button x:Name="ButtonMass" Content="Install to USB Drive (mass)" IsEnabled="False" Grid.Column="1" Grid.Row="3" Margin="40,30" Click="ButtonMass_Click"/>
 
 
         </Grid>

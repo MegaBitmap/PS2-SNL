@@ -14,7 +14,7 @@ foreach ($delPath in $DelPaths)
 {
     if (Test-Path $delPath)
     {
-        Remove-Item -Path $delPath -Recurse
+        Remove-Item -Path $delPath -Recurse -Force
     }
 }
 

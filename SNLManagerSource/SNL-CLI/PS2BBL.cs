@@ -2,7 +2,7 @@
 {
     internal class PS2BBL
     {
-        public static string Config(string installDevice, string irxFolder)
+        public static string Config(string installDevice)
         {
             return "" +
                 "# PlayStation2 Basic BootLoader config file\n" +
@@ -10,9 +10,6 @@
                 "KEY_READ_WAIT_TIME = 400\n" +
                 "OSDHISTORY_READ = 1\n" +
                 "TRAY_EJECT = 1\n\n" +
-                $"LOAD_IRX_E1 = mc?:/{irxFolder}/ps2dev9.irx\n" +
-                $"LOAD_IRX_E2 = mc?:/{irxFolder}/netman.irx\n" +
-                $"LOAD_IRX_E3 = mc?:/{irxFolder}/smap.irx\n\n" +
                 $"LK_AUTO_E1 = {installDevice}:/Enceladus/enceladus_pkd.elf\n" +
                 "LK_AUTO_E2 = mc?:/APPS/OPNPS2LD.ELF\n" +
                 "LK_AUTO_E3 = mc?:/OPL/OPNPS2LD.ELF\n\n" +

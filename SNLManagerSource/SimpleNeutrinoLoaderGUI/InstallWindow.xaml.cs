@@ -14,6 +14,26 @@ namespace SimpleNeutrinoLoaderGUI
             PopulateInstallLocations(locations);
         }
 
+        void StartCLIInstall(string target)
+        {
+            Process process = new();
+            process.StartInfo.FileName = "SNL-CLI.exe";
+            string bootFlag = GetBoot();
+            process.StartInfo.Arguments = $"-install {target} -ps2ip \"{ps2ip}\"{bootFlag}";
+            process.Start();
+            Close();
+        }
+
+        string GetBoot()
+        {
+            bool? isChecked = CheckBoxAutorun.IsChecked;
+            if ( isChecked != null && (bool)isChecked)
+            {
+                return " -boot";
+            }
+            return "";
+        }
+
         void PopulateInstallLocations(string locations)
         {
             if (locations.Contains("mc0"))
@@ -32,29 +52,17 @@ namespace SimpleNeutrinoLoaderGUI
 
         private void ButtonMC0_Click(object sender, RoutedEventArgs e)
         {
-            Process process = new();
-            process.StartInfo.FileName = "SNL-CLI.exe";
-            process.StartInfo.Arguments = $"-install mc0 -ps2ip \"{ps2ip}\" -boot";
-            process.Start();
-            Close();
+            StartCLIInstall("mc0");
         }
 
         private void ButtonMC1_Click(object sender, RoutedEventArgs e)
         {
-            Process process = new();
-            process.StartInfo.FileName = "SNL-CLI.exe";
-            process.StartInfo.Arguments = $"-install mc1 -ps2ip \"{ps2ip}\" -boot";
-            process.Start();
-            Close();
+            StartCLIInstall("mc1");
         }
 
         private void ButtonMass_Click(object sender, RoutedEventArgs e)
         {
-            Process process = new();
-            process.StartInfo.FileName = "SNL-CLI.exe";
-            process.StartInfo.Arguments = $"-install mass -ps2ip \"{ps2ip}\" -boot";
-            process.Start();
-            Close();
+            StartCLIInstall("mass");
         }
     }
 }

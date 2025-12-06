@@ -1,6 +1,6 @@
-﻿using System.Net;
+﻿using FluentFTP;
+using System.Net;
 using System.Net.NetworkInformation;
-using FluentFTP;
 
 namespace SNL_CLI
 {

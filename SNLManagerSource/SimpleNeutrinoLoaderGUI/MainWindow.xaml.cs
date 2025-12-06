@@ -545,7 +545,7 @@ namespace SimpleNeutrinoLoaderGUI
 
         private static void CheckFiles()
         {
-            string[] files = ["SNL-CLI.exe", "udpbd-server.exe", "udpbd-vexfat.exe", "PS2-Games-exFAT-udpbd.zip", "UDPBDTray.exe"];
+            string[] files = ["SNL-CLI.exe", "udpbd_server.dll", "udpbd_vexfat.dll", "PS2-Games-exFAT-udpbd.zip", "UDPBDTray.exe"];
             foreach (var file in files)
             {
                 if (!File.Exists(file))
@@ -604,25 +604,15 @@ namespace SimpleNeutrinoLoaderGUI
 
         private static void QuickKillServer()
         {
-            bool hasKilled = false;
             string[] serverNames = ["UDPBDTray", "udpbd-server", "udpbd-vexfat"];
             foreach (var server in serverNames)
             {
                 Process[] processes = Process.GetProcessesByName(server);
                 if (processes.Length != 0)
                 {
-                    if (!server.Contains("Tray"))
-                    {
-                        hasKilled = true;
-                    }
                     foreach (var item in processes) item.Kill();
                 }
             }
-            if (!hasKilled)
-            {
-                MessageBox.Show("The server was not running.", "Server is stopped", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else MessageBox.Show("The server was stopped.", "Server is stopped", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private async void ComboBoxServer_SelectionChangedAsync(object sender, System.Windows.Controls.SelectionChangedEventArgs e)

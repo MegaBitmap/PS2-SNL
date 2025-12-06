@@ -1,12 +1,11 @@
-﻿using System.Net;
-using FluentFTP;
+﻿using FluentFTP;
+using System.Net;
 
 namespace SNL_CLI
 {
     internal class Install
     {
         readonly List<string> enceladusFiles = ["enceladus_pkd.elf", "helloworld.lua", "icon.icn", "icon.sys", "index.lua"];
-        readonly List<string> networkDrivers = ["ps2dev9.irx", "netman.irx", "smap.irx"];
 
         public void SNL(string installTarget, IPAddress ps2ip, bool modifyBootloader)
         {
@@ -22,8 +21,7 @@ namespace SNL_CLI
                 MiscMethods.PauseExit(46);
             }
             if (!VerifyLocalFiles(enceladusFiles, "InstallFiles/Enceladus") ||
-                !VerifyLocalFiles(SNLFiles.Names(), "InstallFiles/SimpleNeutrinoLoader") ||
-                !VerifyLocalFiles(networkDrivers, "InstallFiles/NetworkDrivers"))
+                !VerifyLocalFiles(SNLFiles.Names(), "InstallFiles/SimpleNeutrinoLoader"))
             {
                 Console.WriteLine("ERROR: One or more files from 'InstallFiles' are missing.");
                 MiscMethods.PauseExit(71);
@@ -74,17 +72,19 @@ namespace SNL_CLI
             }
             if (modifyBootloader)
             {
-                if (!IsPS2BBLInstalled(client))
+                if (IsPS2BBLInstalled(client))
                 {
-                    Console.WriteLine("ERROR: Failed to find an existing PS2BBL installation.");
-                    MiscMethods.PauseExit(27);
+                    string configTarget = "mc?";
+                    if (rootFolder.Contains("mass"))
+                    {
+                        configTarget = "mass";
+                    }
+                    UpdateBLConfig(client, configTarget);
                 }
-                string configTarget = "mc?";
-                if (rootFolder.Contains("mass"))
+                else
                 {
-                    configTarget = "mass";
+                    Console.WriteLine("Skipping PS2BBL configuration update because no installation was found.");
                 }
-                UpdateBLConfig(client, configTarget);
             }
             Console.WriteLine($"\nEnceladus and SimpleNeutrinoLoader have been installed to {rootFolder}\n\n" +
                 "Please remember to sync your game list then start the server.");
@@ -162,16 +162,6 @@ namespace SNL_CLI
             }
         }
 
-        void InstallNetworkDrivers(FtpClient client, string folder)
-        {
-            Console.WriteLine("Starting installation of Network Drivers . . .");
-            foreach (string file in networkDrivers)
-            {
-                Console.WriteLine($"Installing {file} to {folder}{file} . . .");
-                FTP.UploadFile(client, $"InstallFiles/NetworkDrivers/{file}", folder, file);
-            }
-        }
-
         public static bool IsPS2BBLInstalled(FtpClient client)
         {
             string configType = GetBLConfig(client);
@@ -182,22 +172,19 @@ namespace SNL_CLI
             return true;
         }
 
-        public void UpdateBLConfig(FtpClient client, string target)
+        public static void UpdateBLConfig(FtpClient client, string target)
         {
             string configPath = GetBLConfig(client);
-            string configFolder = "";
             string configFile = "";
             if (configPath.Contains("SYS-CONF"))
             {
-                configFolder = "SYS-CONF";
                 configFile = "PS2BBL.INI";
             }
             else
             {
-                configFolder = "PS2BBL";
                 configFile = "CONFIG.INI";
             }
-            string configContents = PS2BBL.Config(target, configFolder);
+            string configContents = PS2BBL.Config(target);
             File.WriteAllText( "temp-BL-CFG.txt", configContents);
             Thread.Sleep(200);
             string readContent = File.ReadAllText("temp-BL-CFG.txt");
@@ -207,16 +194,6 @@ namespace SNL_CLI
                 MiscMethods.PauseExit(82);
             }
             FTP.UploadFile(client, "temp-BL-CFG.txt", configPath, configFile);
-
-            if (!VerifyFTPFiles(client, networkDrivers, configPath, "InstallFiles/NetworkDrivers"))
-            {
-                InstallNetworkDrivers(client, configPath);
-                if (!VerifyFTPFiles(client, networkDrivers, configPath, "InstallFiles/NetworkDrivers"))
-                {
-                    Console.WriteLine("Error: Failed to install network drivers.");
-                    MiscMethods.PauseExit(83);
-                }
-            }
             Console.WriteLine($"The configuration for PS2BBL has been updated in {configPath}{configFile}");
         }
 

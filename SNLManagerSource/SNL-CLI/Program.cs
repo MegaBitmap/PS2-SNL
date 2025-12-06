@@ -1,6 +1,6 @@
-﻿using System.Net;
+﻿using FluentFTP;
+using System.Net;
 using System.Reflection;
-using FluentFTP;
 
 namespace SNL_CLI
 {
@@ -135,7 +135,7 @@ namespace SNL_CLI
                 @"dotnet SNL-CLI.dll -install mc0 -ps2ip 192.168.0.10 -boot" +
                 "\n-install '?' will install Enceladus, neutrino, and SNL to the specified device (mc0, mc1, or mass).\n" +
                 "-ps2ip '?' is the ip address for connecting to the PS2 with PS2Net.\n" +
-                "-boot will modify basic-boot-loader to load network drivers on boot and auto-run SNL.\n\n" +
+                "-boot will modify basic-boot-loader to auto-run SNL.\n\n" +
                 @"dotnet SNL-CLI.dll -path 'C:\PS2\' -ps2ip 192.168.0.10 -bin2iso -enablevmc" +
                 "\n-path '?' is the file path to the CD and DVD folder that contain game ISOs.\n" +
                 "-bin2iso enables automatic CD-ROM Bin to ISO conversion.\n" +

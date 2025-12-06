@@ -1,17 +1,48 @@
 
+$CLIDir = ".\SNL-CLI\bin\Release\net10.0\publish"
+$GUIDir = ".\SimpleNeutrinoLoaderGUI\bin\Release\net10.0-windows7.0\publish"
+$TrayDir = ".\UDPBDTray\bin\Release\net10.0-windows7.0\publish"
+
 $ReleaseVersion = (Get-Content -Path ".\SNL-CLI\SNL-CLI.csproj" | Select-String -Pattern AssemblyVersion).ToString().Trim() -replace "<[^>]+>"
-$ReleaseFolder = ".\SimpleNeutrinoLoaderGUI\bin\Release\net10.0-windows7.0\publish\release-$ReleaseVersion"
+$ReleaseFolder = "$GUIDir\release-$ReleaseVersion"
 $SNLManagerFolder = "$ReleaseFolder\SNL Manager (UDPBD)"
 
 dotnet publish ".\SNL-CLI.sln"
 dotnet publish ".\SimpleNeutrinoLoaderGUI.sln"
 dotnet publish ".\UDPBDTray.sln"
 
+# Preserve the current working directory
+$env:CHERE_INVOKING = "yes"
+# Start a 64 bit Mingw environment
+$env:MSYSTEM = "UCRT64"
+# Run for the first time
+& "C:\msys64\usr\bin\bash" "-lc" " "
+# Update MSYS2 Core (in case any core packages are outdated)
+& "C:\msys64\usr\bin\bash" "-lc" "pacman --noconfirm -Syuu"
+& "C:\msys64\usr\bin\bash" "-lc" "pacman --noconfirm -Syuu"
+& "C:\msys64\usr\bin\bash" "-lc" "pacman --noconfirm --needed -S git make mingw-w64-ucrt-x86_64-gcc"
+& "C:\msys64\usr\bin\bash" "-lc" "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-host x86_64-pc-windows-gnu --no-modify-path"
+# Build udpbd_vexfat.dll
+& "C:\msys64\usr\bin\bash" "-lc" "git clone --recurse-submodules -b windows_dll https://github.com/MegaBitmap/udpbd-vexfat.git"
+& "C:\msys64\usr\bin\bash" "-lc" "export PATH=`"/c/Users/`$USER/.cargo/bin:`$PATH`"
+cd udpbd-vexfat/vexfatbd/
+cargo update
+cd ..
+cargo update
+cargo build --release --target x86_64-pc-windows-gnu"
+# Build udpbd_server.dll
+& "C:\msys64\usr\bin\bash" "-lc" "git clone -b windows_dll https://github.com/MegaBitmap/udpbd-server.git"
+& "C:\msys64\usr\bin\bash" "-lc" "cd udpbd-server/
+make"
+
 New-Item -ItemType Directory -Path $SNLManagerFolder
 
-Get-ChildItem -File -Path ".\SNL-CLI\bin\Release\net10.0\publish\*" | Move-Item -Destination $SNLManagerFolder
-Get-ChildItem -File -Path ".\SimpleNeutrinoLoaderGUI\bin\Release\net10.0-windows7.0\publish\*" | Move-Item -Destination $SNLManagerFolder
-Get-ChildItem -File -Path ".\UDPBDTray\bin\Release\net10.0-windows7.0\publish\*" | Move-Item -Destination $SNLManagerFolder
+Copy-Item -Path .\udpbd-vexfat\target\x86_64-pc-windows-gnu\release\udpbd_vexfat.dll -Destination $SNLManagerFolder -Force
+Copy-Item -Path .\udpbd-server\udpbd_server.dll -Destination $SNLManagerFolder -Force
+
+Get-ChildItem -File -Path "$CLIDir\*" | Move-Item -Destination $SNLManagerFolder -Force
+Get-ChildItem -File -Path "$GUIDir\*" | Move-Item -Destination $SNLManagerFolder -Force
+Get-ChildItem -File -Path "$TrayDir\*" | Move-Item -Destination $SNLManagerFolder -Force
 
 Copy-Item -Path ".\NeededForRelease\*" -Destination $SNLManagerFolder -Recurse -Force
 Copy-Item -Path "..\SNLLua\*" -Destination "$SNLManagerFolder\InstallFiles\SimpleNeutrinoLoader" -Recurse -Force
@@ -19,11 +50,6 @@ Copy-Item -Path "..\SNLLua\*" -Destination "$SNLManagerFolder\InstallFiles\Simpl
 Copy-Item -Path "..\README.md" -Destination "$ReleaseFolder\README.txt" -Force
 Copy-Item -Path "..\LICENSE.txt" -Destination $ReleaseFolder -Force
 Copy-Item -Path "..\neutrino-LICENSE.txt" -Destination $ReleaseFolder -Force
-Copy-Item -Path "..\ps2client-license.txt" -Destination $ReleaseFolder -Force
 
 Compress-Archive -Path "$ReleaseFolder\*" -DestinationPath ".\SNL-Manager-UDPBD-v$ReleaseVersion.zip" -Force
-
-Remove-Item -Path ".\SNL-CLI\bin\Release" -Recurse
-Remove-Item -Path ".\SimpleNeutrinoLoaderGUI\bin\Release" -Recurse
-Remove-Item -Path ".\UDPBDTray\bin\Release" -Recurse
 

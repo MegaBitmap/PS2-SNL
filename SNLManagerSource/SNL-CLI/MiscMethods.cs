@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
+﻿using DiscUtils.Iso9660;
+using FluentFTP;
+using System.Diagnostics;
 using System.Net;
 using System.Text.RegularExpressions;
-using DiscUtils.Iso9660;
-using FluentFTP;
 
 namespace SNL_CLI
 {

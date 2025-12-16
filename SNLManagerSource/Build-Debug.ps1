@@ -33,6 +33,7 @@ make"
 
 Copy-Item -Path .\udpbd-vexfat\target\x86_64-pc-windows-gnu\release\udpbd_vexfat.dll -Destination $GUIDir -Force
 Copy-Item -Path .\udpbd-server\udpbd_server.dll -Destination $GUIDir -Force
+Copy-Item -Path ..\ListBuilder\vmc_groups.list -Destination $GUIDir -Force
 
 Copy-Item -Path .\NeededForRelease\* -Destination $CLIDir -Recurse -Force
 Copy-Item -Path ..\SNLLua\* -Destination "$CLIDir\InstallFiles\SimpleNeutrinoLoader" -Recurse -Force

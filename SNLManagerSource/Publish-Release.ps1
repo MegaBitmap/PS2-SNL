@@ -39,6 +39,7 @@ New-Item -ItemType Directory -Path $SNLManagerFolder
 
 Copy-Item -Path .\udpbd-vexfat\target\x86_64-pc-windows-gnu\release\udpbd_vexfat.dll -Destination $SNLManagerFolder -Force
 Copy-Item -Path .\udpbd-server\udpbd_server.dll -Destination $SNLManagerFolder -Force
+Copy-Item -Path ..\ListBuilder\vmc_groups.list -Destination $SNLManagerFolder -Force
 
 Get-ChildItem -File -Path "$CLIDir\*" | Move-Item -Destination $SNLManagerFolder -Force
 Get-ChildItem -File -Path "$GUIDir\*" | Move-Item -Destination $SNLManagerFolder -Force

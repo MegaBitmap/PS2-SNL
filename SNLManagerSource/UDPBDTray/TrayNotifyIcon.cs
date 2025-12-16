@@ -12,60 +12,48 @@ namespace UDPBDTray
     internal partial class TrayNotifyIcon : ApplicationContext
     {
         private readonly NotifyIcon notifyIcon;
-        private readonly ContextMenuStrip contextMenu;
-        private readonly ToolStripMenuItem menuItemOpenSync;
-        private readonly ToolStripMenuItem menuItemConsoleToggle;
-        private readonly ToolStripMenuItem menuItemKill;
+        private readonly ContextMenuStrip contextMenu = new();
+        private readonly ToolStripMenuItem menuItemOpenSync = new();
+        public static ToolStripMenuItem menuItemConsoleToggle = new();
+        private readonly ToolStripMenuItem menuItemKill = new();
         private readonly IContainer components;
 
-        [LibraryImport("kernel32.dll", SetLastError = true)]
+        [LibraryImport("kernel32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static partial bool AllocConsole();
-        [LibraryImport("kernel32.dll", SetLastError = true)]
+        [LibraryImport("kernel32.dll")]
         private static partial nint GetConsoleWindow();
-        [LibraryImport("kernel32.dll", SetLastError = true)]
-        private static partial nint GetStdHandle(int nStdHandle);
-        [LibraryImport("kernel32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static partial bool GetConsoleMode(nint hConsoleHandle, out uint lpMode);
-        [LibraryImport("kernel32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static partial bool SetConsoleMode(nint hConsoleHandle, uint dwMode);
-        [LibraryImport("user32.dll", SetLastError = true)]
+        [LibraryImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static partial bool ShowWindow(nint hWnd, int nCmdShow);
-
-        private bool showConsole = false;
-        private string serverName = "udpbd-server";
-        private string gamePath = "FAILED TO SET GAMEPATH";
-        private bool isActive = false;
-        private readonly string syncApp = "SimpleNeutrinoLoaderGUI";
-        private readonly int listenPort = 0x4712;
-
-        [LibraryImport("udpbd_server.dll", StringMarshalling = StringMarshalling.Utf8, SetLastError = true), ]
+        [LibraryImport("udpbd_server.dll", StringMarshalling = StringMarshalling.Utf8, SetLastError = true)]
         private static partial int Run_udpbd_server(string path);
         [LibraryImport("udpbd_vexfat.dll", StringMarshalling = StringMarshalling.Utf8, SetLastError = true)]
         private static partial int run_vexfat_server(string path);
 
+        public static bool showConsole = false;
+        public static string ServerName { get; private set; } = "udpbd-server";
+        private string gamePath = "FAILED TO SET GAMEPATH" ;
+        private static bool isActive = false;
+        private readonly string syncApp = "SimpleNeutrinoLoaderGUI";
+        private readonly static string edition = "SimpleNeutrinoLoader";
+        private readonly int listenPort = 0x4712;
+        public static StringBuilder conHistory = new();
+        public CustomConsole? customConsole;
+        public static bool flagAskShutdown = true;
+
         public TrayNotifyIcon()
         {
             components = new Container();
-            contextMenu = new();
-            menuItemOpenSync = new();
-            menuItemConsoleToggle = new();
-            menuItemKill = new();
             notifyIcon = new(components);
-
             CheckAlreadyRunning();
-            SilentKillServer();
             CheckFiles();
             LoadSettings("UDPBDTraySettings.txt");
             GetConsole();
             InitNotifyIcon();
-            isActive = true;
         }
 
-        private void CheckAlreadyRunning()
+        private static void CheckAlreadyRunning()
         {
             string pName = Process.GetCurrentProcess().ProcessName;
             int pCount = Process.GetProcessesByName(pName).Length;
@@ -100,7 +88,7 @@ namespace UDPBDTray
 
             notifyIcon.Icon = Properties.Resources.Icon;
             notifyIcon.ContextMenuStrip = contextMenu;
-            notifyIcon.Text = $"{serverName} is Running";
+            notifyIcon.Text = $"{ServerName} is Running";
             notifyIcon.Visible = true;
             notifyIcon.MouseUp += new MouseEventHandler(NotifyIcon_Click);
         }
@@ -131,17 +119,10 @@ namespace UDPBDTray
 
         private async void StartServerAsync(object? sender, EventArgs e)
         {
-            Process[] UCLIProcess = Process.GetProcessesByName("UDPBD-for-XEB+-CLI");
-            Process[] SCLIProcess = Process.GetProcessesByName("SNL-CLI");
-            if (UCLIProcess.Length != 0 || SCLIProcess.Length != 0)
-            {
-                MessageBox.Show("Please close SNL-CLI and UDPBD-for-XEB+-CLI while UDPBDTray is running.",
-                    "CLI is Running", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                Environment.Exit(-1);
-            }
+            GetInterferingProcess();
             Console.WriteLine("Starting Server . . .");
             Func<int> serverFunc;
-            if (serverName.Contains("vexfat"))
+            if (ServerName.Contains("vexfat"))
             {
                 serverFunc = new Func<int>(() => run_vexfat_server(gamePath));
             }
@@ -149,6 +130,7 @@ namespace UDPBDTray
             {
                 serverFunc = new Func<int>(() => Run_udpbd_server($"\\\\.\\{gamePath}"));
             }
+            isActive = true;
             // server starts here v
             int rValue = await Task.Run(serverFunc);            
             isActive = false;
@@ -156,15 +138,22 @@ namespace UDPBDTray
             {
                 RestartAdmin();
             }
-            EditConsole();
+            ShowConsoleError();
             string errorMessage = "";
-            if ( rValue > 0)
+            if (rValue > 0)
             {
                 Win32Exception ex = new(rValue);
                 errorMessage = $"This might be caused by the following:\n\n{ex.Message}";
             }
-            MessageBox.Show($"Server stopped unexpectedly with a return value of {rValue}\n\n" + errorMessage,
-                "Server Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            DialogResult response = MessageBox.Show($"Server stopped unexpectedly with a return value of {rValue}\n{errorMessage}\n" +
+                "Do you want to save the server console history?",
+                "Server Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+            if (response == DialogResult.Yes)
+            {
+                CustomConsole.CopyConsoleHistory();
+                MessageBox.Show("The server history has been copied to your clipboard",
+                    "Copied to clipboard", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             Environment.Exit(rValue);
         }
 
@@ -182,15 +171,15 @@ namespace UDPBDTray
             }
             else
             {
-                SilentKillServer();
                 Process syncProcess = new();
                 syncProcess.StartInfo.FileName = syncApp;
+                syncProcess.StartInfo.UseShellExecute = true;
                 syncProcess.Start();
                 Environment.Exit(0);
             }
         }
 
-        private void CheckFiles()
+        private static void CheckFiles()
         {
             string[] files = ["udpbd_server.dll", "udpbd_vexfat.dll"];
             foreach (var file in files)
@@ -223,7 +212,7 @@ namespace UDPBDTray
                     "Error Reading Settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(-1);
             }
-            serverName = tempServer;
+            ServerName = tempServer;
             if (tempPath.Contains(".vhdx") && File.Exists(tempPath))
             {
                 string driveLetter = InitVHDX(tempPath);
@@ -262,10 +251,7 @@ namespace UDPBDTray
             process.Start();
             process.WaitForExit();
             int testChar = process.StandardOutput.Peek();
-            if (testChar == 0)
-            {
-                return "";
-            }
+            if (testChar == 0) return "";
             return process.StandardOutput.ReadLine() + "";
         }
 
@@ -283,46 +269,19 @@ namespace UDPBDTray
             showConsole = !showConsole;
             if (showConsole)
             {
-                ShowWindow(GetConsoleWindow(), 5);
+                customConsole = new();
+                customConsole.Show();
             }
             else
             {
-                ShowWindow(GetConsoleWindow(), 0);
+                flagAskShutdown = false;
+                customConsole?.Close();
             }
         }
 
         private void MenuItemKill_Click(object? sender, EventArgs e)
         {
-            isActive = false;
-            QuickKillServer();
             Environment.Exit(0);
-        }
-
-        private static void QuickKillServer()
-        {
-            string[] serverNames = ["udpbd-server", "udpbd-vexfat"];
-            foreach (var server in serverNames)
-            {
-                Process[] processes = Process.GetProcessesByName(server);
-                if (processes.Length != 0)
-                {
-                    foreach (var item in processes) item.Kill();
-                }
-            }
-        }
-
-        private static void SilentKillServer()
-        {
-            string[] serverNames = ["udpbd-server", "udpbd-vexfat"];
-            foreach (var server in serverNames)
-            {
-                Process[] processes = Process.GetProcessesByName(server);
-                if (processes.Length != 0)
-                {
-                    foreach (var item in processes) item.Kill();
-                }
-            }
-            Thread.Sleep(200);
         }
 
         private async void ServerStartBaloonAsync(object? sender, EventArgs e)
@@ -330,7 +289,7 @@ namespace UDPBDTray
             await Task.Delay(4000); // wait for the server to start before checking if it failed
             if (isActive)
             {
-                notifyIcon.ShowBalloonTip(10000, $"{serverName} is Active!", "The PS2 game server is ready to Play!", ToolTipIcon.None);
+                notifyIcon.ShowBalloonTip(10000, $"{ServerName} is Active!", "The PS2 game server is ready to Play!", ToolTipIcon.None);
             }
         }
 
@@ -357,41 +316,37 @@ namespace UDPBDTray
             }
         }
 
-        private static void GetConsole()
+        private static void GetInterferingProcess()
         {
-            const uint ENABLE_QUICK_EDIT = 0x0040;
-            const int STD_INPUT_HANDLE = -10;
-            AllocConsole();
-            ShowWindow(GetConsoleWindow(), 0);
-            nint consoleHandle = GetStdHandle(STD_INPUT_HANDLE);
-            if (!GetConsoleMode(consoleHandle, out uint consoleMode))
+            string[] pNames = ["SNL-CLI", "UDPBD-for-XEB+-CLI", "udpbd-server", "udpbd-vexfat"];
+            foreach (string p in pNames)
             {
-                return;
-            }
-            consoleMode &= ~ENABLE_QUICK_EDIT;
-            if (!SetConsoleMode(consoleHandle, consoleMode))
-            {
-                return;
+                if (Process.GetProcessesByName(p).Length != 0)
+                {
+                    MessageBox.Show($"{p} is currently running.\n Stop the {p} app before starting UDPBDTray.",
+                    "Interfering Process is Running", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Environment.Exit(-1);
+                }
             }
         }
 
-        private void EditConsole()
+        private static void GetConsole()
         {
-            const uint ENABLE_QUICK_EDIT = 0x0040;
-            const int STD_INPUT_HANDLE = -10;
+            AllocConsole();
+            ShowWindow(GetConsoleWindow(), 0);
+            Console.WriteLine($"{edition} UDPBDTray {Assembly.GetExecutingAssembly().GetName().Version} by MegaBitmap");
+        }
+
+        private void ShowConsoleError()
+        {
             showConsole = true;
             menuItemConsoleToggle.Checked = true;
+            if (customConsole == null)
+            {
+                customConsole = new();
+                customConsole.Show();
+            }
             ShowWindow(GetConsoleWindow(), 5);
-            nint consoleHandle = GetStdHandle(STD_INPUT_HANDLE);
-            if (!GetConsoleMode(consoleHandle, out uint consoleMode))
-            {
-                return;
-            }
-            consoleMode |= ENABLE_QUICK_EDIT;
-            if (!SetConsoleMode(consoleHandle, consoleMode))
-            {
-                return;
-            }
         }
     }
 }

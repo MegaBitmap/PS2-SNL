@@ -112,9 +112,9 @@ git clone https://gitlab.com/ps2max/udpbd-server.git
 cd udpbd-server
 make
 ```
-Install .NET 8, GParted, and exfatprogs  
+Install .NET 10, GParted, and exfatprogs  
 ```
-sudo apt install dotnet-runtime-8.0 gparted exfatprogs
+sudo apt install dotnet-runtime-10.0 gparted exfatprogs
 ```
 Create a new exFAT partition in GParted and note the partition number.  
 For this guide the exFAT partition is `/dev/nvme0n1p6`, it will be different on your system.  

@@ -78,6 +78,7 @@ namespace SNL_CLI
             if (gameList.Count < 1)
             {
                 Console.WriteLine($"No games found in {gamePath}/CD or {gamePath}/DVD");
+                Console.WriteLine("Try adding -bin2iso to the command to convert BIN format games to iso.");
                 MiscMethods.PauseExit(5);
             }
             Console.WriteLine($"{gameList.Count} games loaded");

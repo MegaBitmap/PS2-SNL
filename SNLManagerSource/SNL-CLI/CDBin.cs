@@ -2,6 +2,10 @@
 {
     internal class CDBin
     {
+        static readonly byte[] CDROMHeaderReference = [0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00];
+        const int sector_raw_size = 2352;
+        const int sector_target_size = 2048;
+
         public static void ConvertFolder(string scanPath)
         {
             string[] scanFolders = [$"{scanPath}/CD", $"{scanPath}/DVD"];
@@ -27,9 +31,6 @@
 
         public static string ScanBin(FileStream fileIn)
         {
-            byte[] CDROMHeaderReference = [0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00];
-            int sector_raw_size = 2352;
-
             int numSectors = (int)(fileIn.Length / sector_raw_size);
             for (int sectorIndex = 0; sectorIndex < numSectors; sectorIndex++)
             {
@@ -43,10 +44,6 @@
 
         public static void GenerateISO(FileStream fileIn, string outputISO)
         {
-            byte[] CDROMHeaderReference = [0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00];
-            int sector_raw_size = 2352;
-            int sector_target_size = 2048;
-
             using FileStream fileOutISO = new(outputISO, FileMode.Create, FileAccess.Write);
 
             int numSectors = (int)(fileIn.Length / sector_raw_size);

@@ -159,24 +159,7 @@ namespace UDPBDTray
 
         private void MenuItemOpenSync_Click(object? sender, EventArgs e)
         {
-            if (!File.Exists($"{syncApp}.exe"))
-            {
-                MessageBox.Show($"Unable to locate {syncApp}", "Sync app missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            else if (Process.GetProcessesByName(syncApp).Length != 0)
-            {
-                MessageBox.Show("The sync app is already running.", "Already Running", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-            else
-            {
-                Process syncProcess = new();
-                syncProcess.StartInfo.FileName = syncApp;
-                syncProcess.StartInfo.UseShellExecute = true;
-                syncProcess.Start();
-                Environment.Exit(0);
-            }
+            StartSyncApp();
         }
 
         private static void CheckFiles()
@@ -198,8 +181,13 @@ namespace UDPBDTray
             if (!File.Exists(settingsFile))
             {
                 isActive = false;
-                MessageBox.Show("Error the settings file 'UDPBDTraySettings.txt' does not exist.",
-                    "Error Reading Settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DialogResult response = MessageBox.Show("Error the settings file 'UDPBDTraySettings.txt' does not exist.\n" +
+                    "Do you want to open the sync app to apply new settings?",
+                    "Error Reading Settings", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (response == DialogResult.Yes)
+                {
+                    StartSyncApp();
+                }
                 Environment.Exit(-1);
             }
             using TextReader settingsReader = new StreamReader(settingsFile);
@@ -253,6 +241,28 @@ namespace UDPBDTray
             int testChar = process.StandardOutput.Peek();
             if (testChar == 0) return "";
             return process.StandardOutput.ReadLine() + "";
+        }
+
+        private void StartSyncApp()
+        {
+            if (!File.Exists($"{syncApp}.exe"))
+            {
+                MessageBox.Show($"Unable to locate {syncApp}", "Sync app missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            else if (Process.GetProcessesByName(syncApp).Length != 0)
+            {
+                MessageBox.Show("The sync app is already running.", "Already Running", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            else
+            {
+                Process syncProcess = new();
+                syncProcess.StartInfo.FileName = syncApp;
+                syncProcess.StartInfo.UseShellExecute = true;
+                syncProcess.Start();
+                Environment.Exit(0);
+            }
         }
 
         private void NotifyIcon_Click(object? sender, MouseEventArgs e)

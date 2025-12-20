@@ -9,19 +9,19 @@ namespace UDPBDTray
     {
         const int STD_OUTPUT_HANDLE = -11;
 
-        public struct COORD
+        struct COORD
         {
             public short X;
             public short Y;
         }
-        public struct SMALL_RECT
+        struct SMALL_RECT
         {
             public short Left;
             public short Top;
             public short Right;
             public short Bottom;
         }
-        public struct CONSOLE_SCREEN_BUFFER_INFO
+        struct CONSOLE_SCREEN_BUFFER_INFO
         {
             public COORD dwSize;
             public COORD dwCursorPosition;
@@ -30,17 +30,21 @@ namespace UDPBDTray
             public COORD dwMaximumWindowSize;
         }
         [LibraryImport("kernel32.dll")]
-        public static partial nint GetStdHandle(int nStdHandle);
+        private static partial nint GetStdHandle(int nStdHandle);
         [LibraryImport("kernel32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static partial bool GetConsoleScreenBufferInfo(nint hConsoleOutput, out CONSOLE_SCREEN_BUFFER_INFO lpConsoleScreenBufferInfo);
+        private static partial bool GetConsoleScreenBufferInfo(nint hConsoleOutput, out CONSOLE_SCREEN_BUFFER_INFO lpConsoleScreenBufferInfo);
         [LibraryImport("kernel32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static partial bool SetConsoleCursorPosition(nint hConsoleOutput, COORD dwModedwCursorPosition);
+        private static partial bool SetConsoleCursorPosition(nint hConsoleOutput, COORD dwModedwCursorPosition);
         [LibraryImport("kernel32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static partial bool ReadConsoleOutputCharacterA(nint hConsoleOutput, [Out] byte[] lpCharacter,
+        private static partial bool ReadConsoleOutputCharacterA(nint hConsoleOutput, [Out] byte[] lpCharacter,
             uint nLength, COORD dwReadCoord, out uint lpNumberOfCharsRead);
+
+        static COORD origin;
+        static COORD rowIndex;
+        static readonly byte newLine = (byte)'\n';
 
         public CustomConsole()
         {
@@ -48,6 +52,9 @@ namespace UDPBDTray
             Text = Assembly.GetExecutingAssembly().Location + ' '
                 + Assembly.GetExecutingAssembly().GetName().Version + ' '
                 + ServerName;
+            origin.X = 0;
+            origin.Y = 0;
+            rowIndex.X = 0;
         }
 
         private async Task ConsoleUpdateAsync()
@@ -55,9 +62,6 @@ namespace UDPBDTray
             nint outHandle = GetStdHandle(STD_OUTPUT_HANDLE);
             GetConsoleScreenBufferInfo(outHandle, out CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo);
             short conWidth = screenBufferInfo.dwMaximumWindowSize.X;
-            COORD origin;
-            origin.X = 0;
-            origin.Y = 0;
 
             while (true)
             {
@@ -65,23 +69,19 @@ namespace UDPBDTray
                 GetConsoleScreenBufferInfo(outHandle, out screenBufferInfo);
                 short conRow = screenBufferInfo.dwCursorPosition.Y;
                 short conHeight = (short)(MainPanel.Height >> 4); // divide by 16
-                short rowStartRead;
                 uint nLength;
                 if (conRow > conHeight)
                 {
-                    rowStartRead = (short)(conRow - conHeight);
+                    rowIndex.Y = (short)(conRow - conHeight);
                     nLength = (uint)((conHeight + 1) * conWidth);
                 }
                 else
                 {
-                    rowStartRead = 0;
+                    rowIndex.Y = 0;
                     nLength = (uint)((conRow + 1) * conWidth);
                 }
-                COORD temp;
-                temp.X = 0;
-                temp.Y = rowStartRead;
                 byte[] conBuffer = new byte[nLength];
-                bool read = ReadConsoleOutputCharacterA(outHandle, conBuffer, nLength, temp, out uint lpNumberOfCharsRead);
+                bool read = ReadConsoleOutputCharacterA(outHandle, conBuffer, nLength, rowIndex, out uint lpNumberOfCharsRead);
                 if (!read) MessageBox.Show("Error: Failed to read console output");
                 if (conRow > 1000 || conRow + 50 > screenBufferInfo.dwSize.Y)
                 {
@@ -99,7 +99,6 @@ namespace UDPBDTray
         {
             byte[] temp = new byte[input.Length + (input.Length / charPerLine)];
             int offsetLF = 0;
-            byte newLine = (byte)'\n';
             for (int i = 0; i < input.Length; i += charPerLine)
             {
                 if (i + charPerLine < input.Length)
@@ -116,11 +115,8 @@ namespace UDPBDTray
             return Encoding.UTF8.GetString(temp).TrimEnd('\0');
         }
 
-        public static void ClearSaveConsole()
+        private static void ClearSaveConsole()
         {
-            COORD origin;
-            origin.X = 0;
-            origin.Y = 0;
             nint outHandle = GetStdHandle(STD_OUTPUT_HANDLE);
             GetConsoleScreenBufferInfo(outHandle, out CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo);
             short conWidth = screenBufferInfo.dwMaximumWindowSize.X;
@@ -136,9 +132,6 @@ namespace UDPBDTray
 
         public static void CopyConsoleHistory()
         {
-            COORD origin;
-            origin.X = 0;
-            origin.Y = 0;
             nint outHandle = GetStdHandle(STD_OUTPUT_HANDLE);
             GetConsoleScreenBufferInfo(outHandle, out CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo);
             short conWidth = screenBufferInfo.dwMaximumWindowSize.X;

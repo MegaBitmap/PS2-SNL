@@ -1,6 +1,6 @@
 
 
-Copy-Item -Path "..\SNLManagerSource\NeededForRelease\BlankVMC8.bin" -Destination ".\temp.bin"
+Copy-Item -Path "..\SNLSyncSource\NeededForRelease\BlankVMC8.bin" -Destination ".\temp.bin"
 
 & .\ps2vmc-tool.exe ".\temp.bin" --make-directory "/Enceladus"
 

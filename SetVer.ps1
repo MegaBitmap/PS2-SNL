@@ -12,19 +12,19 @@ $oldVer = $lineVer -replace "v", ""
 $newLine = $lineVer -replace $oldVer, $newVer
 (Get-Content -Raw -Path .\SNLLua\version.txt) -replace $lineVer, $newLine | Set-Content -NoNewline -Path .\SNLLua\version.txt
 
-$lineVer = Get-Content -Path .\SNLManagerSource\SimpleNeutrinoLoaderGUI\SimpleNeutrinoLoaderGUI.csproj | Select-String -Pattern "<AssemblyVersion>"
+$lineVer = Get-Content -Path .\SNLSyncSource\SimpleNeutrinoLoaderGUI\SimpleNeutrinoLoaderGUI.csproj | Select-String -Pattern "<AssemblyVersion>"
 $oldVer = $lineVer -replace ".*<AssemblyVersion>", "" -replace "</.*", ""
 $newLine = $lineVer -replace $oldVer, $newVer
-(Get-Content -Path .\SNLManagerSource\SimpleNeutrinoLoaderGUI\SimpleNeutrinoLoaderGUI.csproj) -replace $lineVer, $newLine | Set-Content -Encoding UTF8 -Path .\SNLManagerSource\SimpleNeutrinoLoaderGUI\SimpleNeutrinoLoaderGUI.csproj
+(Get-Content -Path .\SNLSyncSource\SimpleNeutrinoLoaderGUI\SimpleNeutrinoLoaderGUI.csproj) -replace $lineVer, $newLine | Set-Content -Encoding UTF8 -Path .\SNLSyncSource\SimpleNeutrinoLoaderGUI\SimpleNeutrinoLoaderGUI.csproj
 
-$lineVer = Get-Content -Path .\SNLManagerSource\SNL-CLI\SNL-CLI.csproj | Select-String -Pattern "<AssemblyVersion>"
+$lineVer = Get-Content -Path .\SNLSyncSource\SNL-CLI\SNL-CLI.csproj | Select-String -Pattern "<AssemblyVersion>"
 $oldVer = $lineVer -replace ".*<AssemblyVersion>", "" -replace "</.*", ""
 $newLine = $lineVer -replace $oldVer, $newVer
-(Get-Content -Path .\SNLManagerSource\SNL-CLI\SNL-CLI.csproj) -replace $lineVer, $newLine | Set-Content -Encoding UTF8 -Path .\SNLManagerSource\SNL-CLI\SNL-CLI.csproj
+(Get-Content -Path .\SNLSyncSource\SNL-CLI\SNL-CLI.csproj) -replace $lineVer, $newLine | Set-Content -Encoding UTF8 -Path .\SNLSyncSource\SNL-CLI\SNL-CLI.csproj
 
-$lineVer = Get-Content -Path .\SNLManagerSource\UDPBDTray\UDPBDTray.csproj | Select-String -Pattern "<AssemblyVersion>"
+$lineVer = Get-Content -Path .\SNLSyncSource\UDPBDTray\UDPBDTray.csproj | Select-String -Pattern "<AssemblyVersion>"
 $oldVer = $lineVer -replace ".*<AssemblyVersion>", "" -replace "</.*", ""
 $newLine = $lineVer -replace $oldVer, $newVer
-(Get-Content -Path .\SNLManagerSource\UDPBDTray\UDPBDTray.csproj) -replace $lineVer, $newLine | Set-Content -Encoding UTF8 -Path .\SNLManagerSource\UDPBDTray\UDPBDTray.csproj
+(Get-Content -Path .\SNLSyncSource\UDPBDTray\UDPBDTray.csproj) -replace $lineVer, $newLine | Set-Content -Encoding UTF8 -Path .\SNLSyncSource\UDPBDTray\UDPBDTray.csproj
 
 

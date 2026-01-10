@@ -1,11 +1,9 @@
 
 $DelPaths = @(
-".\SimpleNeutrinoLoaderGUI\bin"
-".\SimpleNeutrinoLoaderGUI\obj"
 ".\SNL-CLI\bin"
 ".\SNL-CLI\obj"
-".\UDPBDTray\bin"
-".\UDPBDTray\obj"
+".\UDPBDG\bin"
+".\UDPBDG\obj"
 ".\udpbd-vexfat"
 ".\udpbd-server"
 )

@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyVersion>0.0.0.1</AssemblyVersion>
+    <AssemblyVersion>1.0.6.0</AssemblyVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>

@@ -1,11 +1,9 @@
 
 $CLIDir = ".\SNL-CLI\bin\Debug\net10.0"
-$GUIDir = ".\SimpleNeutrinoLoaderGUI\bin\Debug\net10.0-windows7.0"
-$TrayDir = ".\UDPBDTray\bin\Debug\net10.0-windows7.0"
+$GUIDir = ".\UDPBDG\bin\Debug\net10.0-windows"
 
 dotnet build .\SNL-CLI.sln
-dotnet build .\SimpleNeutrinoLoaderGUI.sln
-dotnet build .\UDPBDTray.sln
+dotnet build .\UDPBDG.slnx
 
 # Preserve the current working directory
 $env:CHERE_INVOKING = "yes"
@@ -33,11 +31,11 @@ make"
 
 Copy-Item -Path .\udpbd-vexfat\target\x86_64-pc-windows-gnu\release\udpbd_vexfat.dll -Destination $GUIDir -Force
 Copy-Item -Path .\udpbd-server\udpbd_server.dll -Destination $GUIDir -Force
-Copy-Item -Path ..\ListBuilder\vmc_groups.list -Destination $GUIDir -Force
 
+Copy-Item -Path ..\ListBuilder\vmc_groups.list -Destination $CLIDir -Force
 Copy-Item -Path .\NeededForRelease\* -Destination $CLIDir -Recurse -Force
+Copy-Item -Path .\NeededForRelease\InstallFiles\ -Destination $GUIDir -Recurse -Force
+
 Copy-Item -Path ..\SNLLua\* -Destination "$CLIDir\InstallFiles\SimpleNeutrinoLoader" -Recurse -Force
-Copy-Item -Path "$CLIDir\*" -Destination $GUIDir -Recurse -Force
-Copy-Item -Path "$TrayDir\*" -Destination $GUIDir -Recurse -Force
-Copy-Item -Path "$GUIDir\*" -Destination $TrayDir -Recurse -Force
+Copy-Item -Path ..\SNLLua\* -Destination "$GUIDir\InstallFiles\SimpleNeutrinoLoader" -Recurse -Force
 

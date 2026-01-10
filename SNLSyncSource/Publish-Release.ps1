@@ -1,15 +1,14 @@
 
 $CLIDir = ".\SNL-CLI\bin\Release\net10.0\publish"
-$GUIDir = ".\SimpleNeutrinoLoaderGUI\bin\Release\net10.0-windows7.0\publish"
-$TrayDir = ".\UDPBDTray\bin\Release\net10.0-windows7.0\publish"
+$GUIDir = ".\UDPBDG\bin\Release\net10.0-windows\publish"
 
 $ReleaseVersion = (Get-Content -Path ".\SNL-CLI\SNL-CLI.csproj" | Select-String -Pattern AssemblyVersion).ToString().Trim() -replace "<[^>]+>"
 $ReleaseFolder = "$GUIDir\release-$ReleaseVersion"
-$SNLManagerFolder = "$ReleaseFolder\SNL Manager (UDPBD)"
+$SNLCLIFolder = "$ReleaseFolder\SNL-CLI"
+$UDPBDGFolder = "$ReleaseFolder\UDPBDG"
 
 dotnet publish ".\SNL-CLI.sln"
-dotnet publish ".\SimpleNeutrinoLoaderGUI.sln"
-dotnet publish ".\UDPBDTray.sln"
+dotnet publish ".\UDPBDG.slnx"
 
 # Preserve the current working directory
 $env:CHERE_INVOKING = "yes"
@@ -35,18 +34,21 @@ cargo build --release --target x86_64-pc-windows-gnu"
 & "C:\msys64\usr\bin\bash" "-lc" "cd udpbd-server/
 make"
 
-New-Item -ItemType Directory -Path $SNLManagerFolder
+New-Item -ItemType Directory -Path $SNLCLIFolder
+New-Item -ItemType Directory -Path $UDPBDGFolder
 
-Copy-Item -Path .\udpbd-vexfat\target\x86_64-pc-windows-gnu\release\udpbd_vexfat.dll -Destination $SNLManagerFolder -Force
-Copy-Item -Path .\udpbd-server\udpbd_server.dll -Destination $SNLManagerFolder -Force
-Copy-Item -Path ..\ListBuilder\vmc_groups.list -Destination $SNLManagerFolder -Force
+Copy-Item -Path .\udpbd-vexfat\target\x86_64-pc-windows-gnu\release\udpbd_vexfat.dll -Destination $UDPBDGFolder -Force
+Copy-Item -Path .\udpbd-server\udpbd_server.dll -Destination $UDPBDGFolder -Force
 
-Get-ChildItem -File -Path "$CLIDir\*" | Move-Item -Destination $SNLManagerFolder -Force
-Get-ChildItem -File -Path "$GUIDir\*" | Move-Item -Destination $SNLManagerFolder -Force
-Get-ChildItem -File -Path "$TrayDir\*" | Move-Item -Destination $SNLManagerFolder -Force
+Copy-Item -Path ..\ListBuilder\vmc_groups.list -Destination $SNLCLIFolder -Force
+Get-ChildItem -File -Path "$CLIDir\*" | Move-Item -Destination $SNLCLIFolder -Force
+Get-ChildItem -File -Path "$GUIDir\*" | Move-Item -Destination $UDPBDGFolder -Force
 
-Copy-Item -Path ".\NeededForRelease\*" -Destination $SNLManagerFolder -Recurse -Force
-Copy-Item -Path "..\SNLLua\*" -Destination "$SNLManagerFolder\InstallFiles\SimpleNeutrinoLoader" -Recurse -Force
+Copy-Item -Path ".\NeededForRelease\*" -Destination $SNLCLIFolder -Recurse -Force
+Copy-Item -Path ".\NeededForRelease\InstallFiles\" -Destination $UDPBDGFolder -Recurse -Force
+
+Copy-Item -Path "..\SNLLua\*" -Destination "$SNLCLIFolder\InstallFiles\SimpleNeutrinoLoader" -Recurse -Force
+Copy-Item -Path "..\SNLLua\*" -Destination "$UDPBDGFolder\InstallFiles\SimpleNeutrinoLoader" -Recurse -Force
 
 Copy-Item -Path "..\README.md" -Destination "$ReleaseFolder\README.txt" -Force
 Copy-Item -Path "..\LICENSE.txt" -Destination $ReleaseFolder -Force

@@ -54,5 +54,5 @@ Copy-Item -Path "..\README.md" -Destination "$ReleaseFolder\README.txt" -Force
 Copy-Item -Path "..\LICENSE.txt" -Destination $ReleaseFolder -Force
 Copy-Item -Path "..\neutrino-LICENSE.txt" -Destination $ReleaseFolder -Force
 
-Compress-Archive -Path "$ReleaseFolder\*" -DestinationPath ".\SNL-Manager-UDPBD-v$ReleaseVersion.zip" -Force
+Compress-Archive -Path "$ReleaseFolder\*" -DestinationPath ".\SNL-UDPBD-v$ReleaseVersion.zip" -Force
 

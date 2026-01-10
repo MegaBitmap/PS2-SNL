@@ -21,13 +21,13 @@ Hold SELECT to exit to browser.
 
 ## UDPBD Setup:
 
-The SNL-Manager application will automatically install Enceladus, SNL, and drivers for UDPBD gameplay.  
+The SNL-UDPBDG or SNL-CLI application can be used to automatically install Enceladus, SNL, and drivers for UDPBD gameplay.  
 
-To save 210KB of space SNL-Manager only includes drivers for UDPBD.  
+To save 210KB of space SNL-UDPBDG only includes drivers for UDPBD.  
 For HDD, HDL, ILINK, MMCE, MX4, or USB use the SNL-Full release.  
 
-Download SNL-Manager from [here](https://github.com/MegaBitmap/PS2-SNL/releases).  
-Extract the SNL-Manager folder to the Desktop or Documents.  
+Download SNL-UDPBDG from [here](https://github.com/MegaBitmap/PS2-SNL/releases).  
+Extract the UDPBDG folder to the Desktop or Documents.  
 It is a portable app, do NOT use Program Files or any other system related folder.  
 **DIRECT Connection** - Plug in the ethernet cable as shown: ↓  
 ![ps2-slim-connected-to-laptop](readmeImages/ps2-slim-connected-to-laptop.jpg)  
@@ -61,41 +61,43 @@ Let the PS2 idle on this screen for the next steps on the PC.
 ### Windows Setup:
 
 **If you plan to use virtual memory cards please read this:**  
-In the SNL-Manager select udpbd-server then check "use vmcs" then sync to the PS2.  
+VMCs only work with exFAT partitions.  
+In the SNL-UDPBDG Sync window, check the VMC checkbox then resync the game list.  
 You must use udpbd-server when using VMCs, udpbd-vexfat does NOT support VMCs.  
-udpbd-server only works with exFAT partitions.  
-A preformatted virtual exFAT drive can be mounted if no exFAT partition is found.  
 
-Start the SNL Manager app (SimpleNeutrinoLoaderGUI.exe).  
-If no exFAT partitions are found, a prompt will appear to mount a virtual exFAT drive.  
-Rip/copy any PlayStation 2 disc images you wish to load into the DVD or CD folder.  
+Start the SNL-UDPBDG sync/server app (UDPBDG.exe).  
+(optional) Click mount exFAT drive for VMC support.  
+Rip/copy any PlayStation 2 disc images you wish to load into a DVD or CD folder.  
+Click on choose game path and pick any game in a CD or DVD folder.  
 Example:  `E:/DVD/Grand Theft Auto III.iso`  
-The app can automatically convert Bin+Cue files to ISO if the box is checked then Synced.  
-If you are using udpbd-vexfat, a regular folder can be used instead.  
-For example in Documents, create a new folder PS2.  
-Example:  `%USERPROFILE%/Documents/PS2 Games/DVD/Grand Theft Auto III.iso`  
-Type in the IP address and click Connect.  
-![mainWindow](readmeImages/mainWindow.jpg)  
-Then click Install to PS2 and choose the target.  
-![installWindow](readmeImages/installWindow.jpg)  
+or        `C:\Users\%USERNAME%\Documents\PS2\DVD\TimeSplitters 2.iso`  
+
+Choose the game path and click Sync to SNL.  
+![mainWindow](readmeImages/udpbdg-settings.jpg)  
+Type in the IP address and connect to launchELF's PS2Net.  
+Then click Install to one of the PS2's memory card (*1.2MB FREE SPACE REQUIRED*).  
 Wait for the install to complete, this is what a successful install will show:  
-![installed](readmeImages/installed.jpg)  
-Then select your game folder and Sync with PS2.  
-![synced](readmeImages/synced.jpg)  
-Click Start Server and make sure to allow.  
-![udpbd-vexfat-firewall](readmeImages/udpbd-vexfat-firewall.jpg)  
-If you miss clicked, either move the SNL-Manager folder inside a new folder or manually delete the inbound rules for udpbd-vexfat in 'Windows Defender Firewall with Advanced Security'.  
-This will start the UDPBDTray notification tray icon which runs the server itself.  
-UDPBDTray is used to show/hide console output, open the manager app, or shutdown the server.  
-After UDPBDTray is started SNL-Manager can be closed.  
+![installed](readmeImages/udpbdg-install.jpg)  
+Then click Sync game list.  
+![synced](readmeImages/udpbdg-sync.jpg)  
+After the sync completes, close the sync window.  
+![start-server](readmeImages/udpbdg-start.jpg)  
+Click Start Server and make sure to allow in windows firewall.  
+![udpbdg-firewall](readmeImages/udpbdg-firewall.jpg)  
+This will start the UDPBDG notification tray icon that runs the server.  
+If you mistakenly clicked cancel on the firewall prompt, close UDPBDG by clicking Exit on the tray icon.  
+Then either move the UDPBDG folder inside a new folder or manually delete the inbound rules for UDPBDG in 'Windows Defender Firewall with Advanced Security' to make the prompt reappear.  
+
+Click the tray icon to show/hide console output, open the settings/sync window, or shutdown the server.  
 The server needs to be open and running for the entire play session (Disable sleep on the PC).  
+
 Now you are ready to play, run Enceladus or reboot the PS2.  
 ![snl](readmeImages/snl.jpg)  
 
 If you want the server to start automatically when the PC is turned on follow these steps:
 
-- Right Click `UDPBDTray.exe` → Show more → Create Shortcut
-- Move the UDPBDTray shortcut to this folder:  
+- Right Click `UDPBDG.exe` → Show more → Create Shortcut
+- Move the UDPBDG shortcut to this folder:  
 `C:\Users\%USERNAME%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup`  
 Now the server will start automatically.  
 

@@ -8,7 +8,7 @@ namespace SNL_CLI
     {
         static void Main(string[] args)
         {
-            Console.WriteLine($"Simple Neutrino Loader Manager CLI {Assembly.GetExecutingAssembly().GetName().Version} by MegaBitmap");
+            Console.WriteLine($"Simple Neutrino Loader UDPBD CLI {Assembly.GetExecutingAssembly().GetName().Version} by MegaBitmap");
 
             string gamePath = "";
             IPAddress ps2ip = IPAddress.Parse("192.168.0.10");

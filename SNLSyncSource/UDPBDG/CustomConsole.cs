@@ -144,17 +144,6 @@ public partial class CustomConsole : Form
 
     private void CustomConsole_FormClosed(object sender, FormClosedEventArgs e)
     {
-        if (flagAskShutdown)
-        {
-            DialogResult response = MessageBox.Show($"Would you like to shut down {ServerName}?\n\n" +
-                "Press 'No' to close the console and keep running.",
-                "Shut Down Server", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (response == DialogResult.Yes)
-            {
-                Environment.Exit(0);
-            }
-        }
-        flagAskShutdown = true;
         showConsole = false;
         menuItemConsoleToggle.Checked = false;
     }

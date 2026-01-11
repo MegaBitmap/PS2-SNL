@@ -128,9 +128,13 @@ public partial class Settings : Form
 
     private static string SetGameList(string gamePath)
     {
-        DirectoryInfo cdInfo = new($"{gamePath}/CD");
-        DirectoryInfo dvdInfo = new($"{gamePath}/DVD");
-        DirectoryInfo[] dirInfos = [cdInfo, dvdInfo];
+        int gameCount = 0;
+        List<DirectoryInfo> dirInfos = [];
+        string[] folders = ["CD", "DVD"];
+        foreach (string folder in folders)
+            if (Directory.Exists($"{gamePath}/{folder}"))
+                dirInfos.Add(new DirectoryInfo($"{gamePath}/{folder}"));
+
         foreach (DirectoryInfo dirInfo in dirInfos)
         {
             foreach (FileInfo fileInfo in dirInfo.EnumerateFiles("*.bin"))
@@ -143,15 +147,15 @@ public partial class Settings : Form
                     if (binResult == DialogResult.Yes)
                         CDBin.ConvertFolder(gamePath);
 
-                    int gameCount = cdInfo.EnumerateFiles("*.iso").Count() + dvdInfo.EnumerateFiles("*.iso").Count();
-                    if (gameCount > 0)
-                        return $"{gameCount} Games Loaded";
-
-                    return "0 Games Found";
+                    break;
                 }
             }
+            gameCount += dirInfo.EnumerateFiles("*.iso").Count();
         }
-        return $"{cdInfo.EnumerateFiles("*.iso").Count() + dvdInfo.EnumerateFiles("*.iso").Count()} Games Loaded";
+        if (gameCount > 0)
+            return $"{gameCount} Games Loaded";
+
+        return "0 Games Found";
     }
 
     private bool IsGamePathValid()

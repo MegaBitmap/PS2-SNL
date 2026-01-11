@@ -42,7 +42,6 @@ internal partial class NotificationTray : ApplicationContext
     public static StringBuilder conHistory = new();
     private CustomConsole? customConsole;
     public static bool showConsole = false;
-    public static bool flagAskShutdown = true;
     private static bool isActive = false;
     private static bool okLoad = false;
 
@@ -282,10 +281,7 @@ internal partial class NotificationTray : ApplicationContext
             customConsole.Show();
         }
         else
-        {
-            flagAskShutdown = false;
             customConsole?.Close();
-        }
     }
 
     private void MenuItemKill_Click(object? sender, EventArgs e)

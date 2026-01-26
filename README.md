@@ -24,7 +24,7 @@ Hold SELECT to exit to browser.
 The SNL-UDPBDG or SNL-CLI application can be used to automatically install Enceladus, SNL, and drivers for UDPBD gameplay.  
 
 To save 210KB of space SNL-UDPBDG only includes drivers for UDPBD.  
-For HDD, HDL, ILINK, MMCE, MX4, or USB use the SNL-Full release.  
+For HDD, UDPBD-HDD, HDL, ILINK, MMCE, MX4, or USB use the SNL-Full release.  
 
 Download SNL-UDPBDG from [here](https://github.com/MegaBitmap/PS2-SNL/releases).  
 Extract the UDPBDG folder to the Desktop or Documents.  
@@ -206,13 +206,16 @@ Here is a list of all neutrino arguments:
 
 ```
 -bsd=<driver>     Backing store drivers, supported are:
-                - no     (uses cdvd, default)
-                - ata    (block device)
-                - usb    (block device)
-                - mx4sio (block device)
-                - udpbd  (block device)
-                - ilink  (block device)
-                - mmce   (file system)
+                - no        (uses cdvd, default)
+                - ata       (block device)
+                - usb       (block device)
+                - mx4sio    (block device)
+                - udpbd     (block device)
+                - ilink     (block device)
+                - mmce      (file system)
+                  The following two require a hdd connected to a real sony network hdd adapter:
+                - ata-net   (games are loaded from hdd but with in game Online/LAN networking support)
+                - udpbd-hdd (games are loaded from udpbd but with in game hdd support)
 
 -bsdfs=<driver>   Backing store filesystem drivers used for block device, supported are:
                 - exfat (default)

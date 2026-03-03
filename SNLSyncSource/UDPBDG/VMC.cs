@@ -13,7 +13,7 @@ internal class VMC
         string crossSaveIDs = string.Join("", VMCList);
         foreach (var game in gameList)
         {
-            string serialID = ISO.GetSerialID(gamePath + game, logLabel, logPanel);
+            string serialID = GameID.Get(gamePath + game, logLabel, logPanel);
             if (string.IsNullOrEmpty(serialID))
             {
                 SyncSNL.WriteLine($"Failed to get serial ID for {gamePath + game}", logLabel, logPanel);

@@ -48,11 +48,11 @@ public partial class SyncXEBP : Form
         List<string> gameListWithID = [];
         foreach (var game in gameList)
         {
-            string serialGameID = ISO.GetSerialID(gamePath + game, LogLabel, LogPanel);
+            WriteLine($"Loading {game}");
+            string serialGameID = GameID.Get(gamePath + game, LogLabel, LogPanel);
             if (!string.IsNullOrEmpty(serialGameID))
             {
                 gameListWithID.Add($"{serialGameID} {game}");
-                WriteLine($"Loaded {game}");
             }
             else
                 WriteLine($"Unable to find a serial Game ID for {game}");
@@ -136,7 +136,7 @@ public partial class SyncXEBP : Form
         var artList = await FTP.GetDir(client, "/mass/0/XEBPLUS/GME/ART/");
         foreach (var game in gameList)
         {
-            string serialID = ISO.GetSerialID(gamePath + game, LogLabel, LogPanel);
+            string serialID = GameID.Get(gamePath + game, LogLabel, LogPanel);
             if (string.IsNullOrEmpty(serialID)) continue;
             if (!artList.Contains($"{serialID}_BG.png"))
             {

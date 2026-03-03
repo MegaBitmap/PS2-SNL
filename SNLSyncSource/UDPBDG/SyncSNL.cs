@@ -112,12 +112,12 @@ public partial class SyncSNL : Form
         List<string> gameListWithID = [];
         foreach (var game in gameList)
         {
-            string serialGameID = ISO.GetSerialID(gamePath + game, LogLabel, LogPanel);
+            WriteLine($"Loading {game}");
+            string serialGameID = GameID.Get(gamePath + game, LogLabel, LogPanel);
             string friendlyName = Path.GetFileNameWithoutExtension(gamePath + game);
             if (!string.IsNullOrEmpty(serialGameID))
             {
                 gameListWithID.Add($"{friendlyName}|{serialGameID}|-bsd=udpbd|-dvd=mass:{game}");
-                WriteLine($"Loaded {game}");
             }
             else
                 WriteLine($"Unable to find a serial Game ID for {game}");

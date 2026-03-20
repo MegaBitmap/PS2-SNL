@@ -89,28 +89,27 @@ print("HDD, ILINK, MMCE, MX4, or USB")
 
 backing_device = ""
 file_system = ""
-path_prefix = "mass:"
+path_prefix = ""
 
 read_line = input().upper()
 if "HDD" in read_line:
     list_type = "HDD"
-    backing_device = "|-bsd=ata"
+    path_prefix = "ata:"
 elif "ILINK" in read_line:
     list_type = "ILINK"
-    backing_device = "|-bsd=ilink"
+    path_prefix = "ilink:"
 elif "MMCE" in read_line:
     list_type = "MMCE"
-    backing_device = "|-bsd=mmce"
     path_prefix = "mmce:"
 elif "MX4" in read_line:
     list_type = "MX4"
-    backing_device = "|-bsd=mx4sio"
+    path_prefix = "mx4sio:"
 elif "UDPBD" in read_line:
     list_type = "UDPBD"
-    backing_device = "|-bsd=udpbd"
+    path_prefix = "udpbd:"
 elif "USB" in read_line:
     list_type = "USB"
-    backing_device = "|-bsd=usb"
+    path_prefix = "usb:"
 else:
     print("Unable to determine list type.")
     print("Press Enter to Exit:")

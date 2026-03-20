@@ -16,6 +16,7 @@ internal class SNLFiles
             "bdm.irx",
             "bdmfs_fatfs.irx",
             "bsd-udpbd.toml",
+            "bsd-udpfs.toml",
             "bsdfs-exfat.toml",
             "cdvdfsv.irx",
             "cdvdman_emu.irx",
@@ -26,7 +27,7 @@ internal class SNLFiles
             "emu-dvd-file.toml",
             "emu-mc-file.toml",
             "fakemod.irx",
-            "fhi_bd_defrag.irx",
+            "fhi_bd.irx",
             "fileXio.irx",
             "icon.icn",
             "icon.sys",
@@ -35,6 +36,7 @@ internal class SNLFiles
             "i_bdm.toml",
             "i_dev9_hidden.toml",
             "mc_emu.irx",
+            "ministack.irx",
             "neutrino.elf",
             "p-freemem.toml",
             "p-membo.toml",
@@ -44,9 +46,13 @@ internal class SNLFiles
             "patch_freemem.irx",
             "patch_membo.irx",
             "patch_rc_uya.irx",
-            "smap_udpbd.irx",
+            "smap.irx",
             "system.toml",
-            "udnl.irx"
+            "udnl.irx",
+            "udpbd.irx",
+            "udpfs_bd.irx",
+            "udpfs_fhi.irx",
+            "udpfs_ioman.irx"
         ];
     }
 }

@@ -35,6 +35,7 @@ Copy-Item -Path .\udpbd-server\udpbd_server.dll -Destination $GUIDir -Force
 Copy-Item -Path ..\ListBuilder\vmc_groups.list -Destination $CLIDir -Force
 Copy-Item -Path .\NeededForRelease\* -Destination $CLIDir -Recurse -Force
 Copy-Item -Path .\NeededForRelease\InstallFiles\ -Destination $GUIDir -Recurse -Force
+Copy-Item -Path ..\udpfs_server\ -Destination $GUIDir -Recurse -Force
 
 Copy-Item -Path ..\SNLLua\* -Destination "$CLIDir\InstallFiles\SimpleNeutrinoLoader" -Recurse -Force
 Copy-Item -Path ..\SNLLua\* -Destination "$GUIDir\InstallFiles\SimpleNeutrinoLoader" -Recurse -Force

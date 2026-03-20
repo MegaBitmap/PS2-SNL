@@ -13,8 +13,15 @@ internal class BSDConf
             "depends = [\"i_bdm\", \"i_dev9_hidden\"]\n\n" +
             "# Modules to load\n" +
             "[[module]]\n" +
-            "file = \"smap_udpbd.irx\"\n" +
+            "file = \"smap.irx\"\n" +
+            "env = [\"LE\", \"EE\"]\n" +
+            "[[module]]\n" +
+            "file = \"ministack.irx\"\n" +
             $"args = [\"ip={ps2ip}\"]\n" +
+            "env = [\"LE\", \"EE\"]\n" +
+            "[[module]]\n" +
+            "file = \"udpbd.irx\"\n" +
+            "#file = \"udpfs_bd.irx\" # Alternative driver based on UDPRDMA\n" +
             "env = [\"LE\", \"EE\"]\n";
     }
 }

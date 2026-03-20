@@ -3,7 +3,7 @@ import os
 
 backingDevice = ''
 backingFileSystem = ''
-backingPrefix = 'mass:'
+backingPrefix = ''
 FinalList = ''
 
 userInput = input("Please enter the full name of the file you want to convert (example: neutrinoHDD.list):")
@@ -16,7 +16,7 @@ if not os.path.isfile(userInput):
 upperInput = userInput.upper()
 if 'HDD' in upperInput:
     ListType = 'HDD'
-    backingDevice = '|-bsd=ata'
+    backingPrefix = 'ata:'
 elif 'HDL' in upperInput:
     ListType = 'HDL'
     backingDevice = '|-bsd=ata'
@@ -24,20 +24,19 @@ elif 'HDL' in upperInput:
     backingPrefix = 'hdl:'
 elif 'ILINK' in upperInput:
     ListType = 'ILINK'
-    backingDevice = '|-bsd=ilink'
+    backingPrefix = 'ilink:'
 elif 'MMCE' in upperInput:
     ListType = 'MMCE'
-    backingDevice = '|-bsd=mmce'
     backingPrefix = 'mmce:'
 elif 'MX4' in upperInput:
     ListType = 'MX4'
-    backingDevice = '|-bsd=mx4sio'
+    backingPrefix = 'mx4sio:'
 elif 'UDPBD' in upperInput:
     ListType = 'UDPBD'
-    backingDevice = '|-bsd=udpbd'
+    backingPrefix = 'udpbd:'
 elif 'USB' in upperInput:
     ListType = 'USB'
-    backingDevice = '|-bsd=usb'
+    backingPrefix = 'usb:'
 else:
     print("Unable to determine list type.")
     print('Press Enter to Exit:')

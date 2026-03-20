@@ -223,7 +223,7 @@ internal class Program
             string friendlyName = Path.GetFileNameWithoutExtension(gamePath + game);
             if (!string.IsNullOrEmpty(serialGameID))
             {
-                gameListWithID.Add($"{friendlyName}|{serialGameID}|-bsd=udpbd|-dvd=mass:{game}");
+                gameListWithID.Add($"{friendlyName}|{serialGameID}|-dvd=udpbd:{game}");
             }
             else
             {

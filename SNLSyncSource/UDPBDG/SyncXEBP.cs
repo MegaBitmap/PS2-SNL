@@ -9,13 +9,16 @@ public partial class SyncXEBP : Form
     private static string gamePath = "";
     private const string artUrl =
         "https://archive.org/download/OPLM_ART_2024_09/OPLM_ART_2024_09.zip/PS2/SERIALID/SERIALID";
+    private readonly string mode = "";
 
-    public SyncXEBP(string tempGamePath)
+    public SyncXEBP(string tempGamePath, string input_mode)
     {
         InitializeComponent();
         gamePath = tempGamePath;
-        SyncSNL.SetVMCCheckbox(VMCCheckbox);
+        SyncSNL.SetVMCCheckbox(VMCCheckbox, input_mode);
         SyncSNL.LoadIP(PS2IPTextBox);
+        mode = input_mode;
+        Text += $" ({mode} mode)";
     }
 
     private async void ConnectButton_Click(object sender, EventArgs e)
@@ -94,12 +97,23 @@ public partial class SyncXEBP : Form
             await FTP.CreateDirectory(client, "/mass/0/XEBPLUS/CFG/neutrinoLauncher/", LogLabel, LogPanel);
             WriteLine("Created the folder mass:/XEBPLUS/CFG/neutrinoLauncher/");
         }
-        string udpConf = BSDConf.Config(PS2IPTextBox.Text);
-        if (!InstallSNL.MakeDirectory("temp")) return;
-        File.WriteAllText("temp/temp-bsd-udpbd.toml", udpConf);
-        await FTP.UploadFile(client, "temp/temp-bsd-udpbd.toml", "/mass/0/XEBPLUS/APPS/neutrinoLauncher/config/", "bsd-udpbd.toml", LogLabel, LogPanel);
-        WriteLine($"Set XEBPLUS/APPS/neutrinoLauncher/config/bsd-udpbd.toml to ip={PS2IPTextBox.Text}");
-
+        if (mode == "udpbd" || mode == "udpfs_bd")
+        {
+            string udpConf = BSDConf.Udpbd(PS2IPTextBox.Text, mode);
+            if (!InstallSNL.MakeDirectory("temp")) return;
+            File.WriteAllText("temp/temp-bsd-udpbd.toml", udpConf);
+            await FTP.UploadFile(client, "temp/temp-bsd-udpbd.toml", "/mass/0/XEBPLUS/APPS/neutrinoLauncher/config/", "bsd-udpbd.toml", LogLabel, LogPanel);
+            WriteLine($"Updated XEBPLUS/APPS/neutrinoLauncher/config/bsd-udpbd.toml to ip={PS2IPTextBox.Text}\n" +
+                $"Updated udp driver to {mode}.irx");
+        }
+        else if (mode == "udpfs")
+        {
+            string udpConf = BSDConf.Udpfs(PS2IPTextBox.Text);
+            if (!InstallSNL.MakeDirectory("temp")) return;
+            File.WriteAllText("temp/temp-bsd-udpfs.toml", udpConf);
+            await FTP.UploadFile(client, "temp/temp-bsd-udpfs.toml", "/mass/0/XEBPLUS/APPS/neutrinoLauncher/config/", "bsd-udpfs.toml", LogLabel, LogPanel);
+            WriteLine($"Updated XEBPLUS/APPS/neutrinoLauncher/config/bsd-udpfs.toml to ip={PS2IPTextBox.Text}");
+        }
         if (ArtCheckbox.Checked)
             await DownloadArtList(gameList, client);
 

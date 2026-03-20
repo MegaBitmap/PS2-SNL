@@ -70,7 +70,7 @@ internal class VMC
                 vmcRelativePath = $"/VMC/{serialID}_0.bin";
                 vmcFullPath = $"{gamePath}{vmcRelativePath}";
             }
-            gameListVMC.Add($"{friendlyName}|{serialID}|-bsd=udpbd|-dvd=mass:{game}|-mc0=mass:{vmcRelativePath}");
+            gameListVMC.Add($"{friendlyName}|{serialID}|-dvd=udpbd:{game}|-mc0=udpbd:{vmcRelativePath}");
             if (!File.Exists(vmcFullPath))
             {
                 if (MiscMethods.CheckSpace($"BlankVMC{currentVmcSize}.bin", vmcFullPath))

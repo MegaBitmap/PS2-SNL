@@ -176,28 +176,7 @@ internal partial class NotificationTray : ApplicationContext
 
     private static int Run_udpfs_server(string mode, string path)
     {
-        string[] python_paths = [
-            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + pythonFolderDLL,
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
-            @"\Programs\Python" + pythonFolderDLL
-        ];
-        string found_python_path = "";
-        foreach (string python_path in python_paths)
-        {
-            if (File.Exists(python_path))
-            {
-                found_python_path = python_path;
-                break;
-            }
-        }
-        if (string.IsNullOrEmpty(found_python_path))
-        {
-            MessageBox.Show($"Failed to find a python {pythonVersion} installation.\n" +
-                $"Install python to either:\n{python_paths[0]}\nor\n{python_paths[1]}",
-                "Failed to find python", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            return -1;
-        }
-        Runtime.PythonDLL = found_python_path;
+        Runtime.PythonDLL = GetPythonDLL();
         PythonEngine.Initialize();
         PythonEngine.BeginAllowThreads();
         var gil = Py.GIL();
@@ -234,6 +213,35 @@ internal partial class NotificationTray : ApplicationContext
             gil.Dispose();
         }
         return rVal;
+    }
+
+    private static string GetPythonDLL()
+    {
+        string[] python_paths = [
+            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + pythonFolderDLL,
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
+            @"\Programs\Python" + pythonFolderDLL
+        ];
+        string found_python_path = "";
+        foreach (string python_path in python_paths)
+        {
+            if (File.Exists(python_path))
+            {
+                found_python_path = python_path;
+                break;
+            }
+        }
+        if (string.IsNullOrEmpty(found_python_path))
+        {
+            isActive = false;
+            notifyIcon.Icon = Resources.XIcon;
+            notifyIcon.Text = $"{ServerName} failed, python is missing";
+            MessageBox.Show($"Failed to find a python {pythonVersion} installation.\n" +
+                $"Install python to either:\n{python_paths[0]}\nor\n{python_paths[1]}",
+                "Failed to find python", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Environment.Exit(-1);
+        }
+        return found_python_path;
     }
 
     private void MenuItemSettings_Click(object? sender, EventArgs e)

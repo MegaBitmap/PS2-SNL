@@ -20,7 +20,7 @@ $env:MSYSTEM = "UCRT64"
 & "C:\msys64\usr\bin\bash" "-lc" "pacman --noconfirm -Syuu"
 & "C:\msys64\usr\bin\bash" "-lc" "pacman --noconfirm -Syuu"
 & "C:\msys64\usr\bin\bash" "-lc" "pacman --noconfirm --needed -S git make mingw-w64-ucrt-x86_64-gcc"
-& "C:\msys64\usr\bin\bash" "-lc" "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-host x86_64-pc-windows-gnu --no-modify-path"
+& "C:\msys64\usr\bin\bash" "-lc" "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path"
 # Build udpbd_vexfat.dll
 & "C:\msys64\usr\bin\bash" "-lc" "git clone --recurse-submodules -b windows_dll https://github.com/MegaBitmap/udpbd-vexfat.git"
 & "C:\msys64\usr\bin\bash" "-lc" "export PATH=`"/c/Users/`$USER/.cargo/bin:`$PATH`"

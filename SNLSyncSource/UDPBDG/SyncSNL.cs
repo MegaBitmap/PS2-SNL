@@ -16,7 +16,7 @@ public partial class SyncSNL : Form
     {
         InitializeComponent();
         gamePath = tempGamePath;
-        SetVMCCheckbox(VMCCheckbox, input_mode);
+        SetVMCCheckbox(gamePath, VMCCheckbox, input_mode);
         LoadIP(PS2IPTextBox);
         mode = input_mode;
         Text += $" ({mode} mode)";
@@ -327,17 +327,18 @@ public partial class SyncSNL : Form
         ipBox.Text = tempIP;
     }
 
-    public static void SetVMCCheckbox(CheckBox vmcCheckbox, string mode)
+    public static void SetVMCCheckbox(string gamePath, CheckBox vmcCheckbox, string mode)
     {
+        if (mode == "udpfs")
+        {
+            vmcCheckbox.Visible = false;
+            return;
+        }
         if (gamePath.Length != 2) return; // the CD and DVD folders must be in the root of and exFAT drive
         DriveInfo driveInfo = new(gamePath);
         if (driveInfo.DriveFormat == "exFAT")
         {
             vmcCheckbox.Enabled = true;
-        }
-        if (mode == "udpfs")
-        {
-            vmcCheckbox.Visible = false;
         }
     }
 

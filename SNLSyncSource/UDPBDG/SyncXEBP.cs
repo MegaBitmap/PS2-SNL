@@ -15,7 +15,7 @@ public partial class SyncXEBP : Form
     {
         InitializeComponent();
         gamePath = tempGamePath;
-        SyncSNL.SetVMCCheckbox(VMCCheckbox, input_mode);
+        SyncSNL.SetVMCCheckbox(gamePath, VMCCheckbox, input_mode);
         SyncSNL.LoadIP(PS2IPTextBox);
         mode = input_mode;
         Text += $" ({mode} mode)";
@@ -102,17 +102,23 @@ public partial class SyncXEBP : Form
             string udpConf = BSDConf.Udpbd(PS2IPTextBox.Text, mode);
             if (!InstallSNL.MakeDirectory("temp")) return;
             File.WriteAllText("temp/temp-bsd-udpbd.toml", udpConf);
+            File.WriteAllText("temp/temp-loadUDPBD.lua", XEBPConf.Set("udpbd"));
             await FTP.UploadFile(client, "temp/temp-bsd-udpbd.toml", "/mass/0/XEBPLUS/APPS/neutrinoLauncher/config/", "bsd-udpbd.toml", LogLabel, LogPanel);
+            await FTP.UploadFile(client, "temp/temp-loadUDPBD.lua", "/mass/0/XEBPLUS/APPS/neutrinoLauncher/", "loadUDPBD.lua", LogLabel, LogPanel);
             WriteLine($"Updated XEBPLUS/APPS/neutrinoLauncher/config/bsd-udpbd.toml to ip={PS2IPTextBox.Text}\n" +
-                $"Updated udp driver to {mode}.irx");
+                $"Updated udp driver to {mode}.irx\n" +
+                "Updated XEBPLUS/APPS/neutrinoLauncher/loadUDPBD.lua to use udpbd");
         }
         else if (mode == "udpfs")
         {
             string udpConf = BSDConf.Udpfs(PS2IPTextBox.Text);
             if (!InstallSNL.MakeDirectory("temp")) return;
             File.WriteAllText("temp/temp-bsd-udpfs.toml", udpConf);
+            File.WriteAllText("temp/temp-loadUDPBD.lua", XEBPConf.Set("udpfs"));
             await FTP.UploadFile(client, "temp/temp-bsd-udpfs.toml", "/mass/0/XEBPLUS/APPS/neutrinoLauncher/config/", "bsd-udpfs.toml", LogLabel, LogPanel);
-            WriteLine($"Updated XEBPLUS/APPS/neutrinoLauncher/config/bsd-udpfs.toml to ip={PS2IPTextBox.Text}");
+            await FTP.UploadFile(client, "temp/temp-loadUDPBD.lua", "/mass/0/XEBPLUS/APPS/neutrinoLauncher/", "loadUDPBD.lua", LogLabel, LogPanel);
+            WriteLine($"Updated XEBPLUS/APPS/neutrinoLauncher/config/bsd-udpfs.toml to ip={PS2IPTextBox.Text}\n" +
+                "Updated XEBPLUS/APPS/neutrinoLauncher/loadUDPBD.lua to use udpfs");
         }
         if (ArtCheckbox.Checked)
             await DownloadArtList(gameList, client);

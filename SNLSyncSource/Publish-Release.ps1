@@ -46,7 +46,7 @@ Get-ChildItem -File -Path "$GUIDir\*" | Move-Item -Destination $UDPBDGFolder -Fo
 
 Copy-Item -Path ".\NeededForRelease\*" -Destination $SNLCLIFolder -Recurse -Force
 Copy-Item -Path ".\NeededForRelease\InstallFiles\" -Destination $UDPBDGFolder -Recurse -Force
-Copy-Item -Path "..\udpfs_server\" -Destination $GUIDir -Recurse -Force
+Copy-Item -Path "..\udpfs_server\" -Destination $UDPBDGFolder -Recurse -Force
 
 Copy-Item -Path "..\SNLLua\*" -Destination "$SNLCLIFolder\InstallFiles\SimpleNeutrinoLoader" -Recurse -Force
 Copy-Item -Path "..\SNLLua\*" -Destination "$UDPBDGFolder\InstallFiles\SimpleNeutrinoLoader" -Recurse -Force

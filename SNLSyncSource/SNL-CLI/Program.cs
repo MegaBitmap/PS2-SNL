@@ -16,6 +16,7 @@ internal class Program
         string installTarget = "";
         bool enableVMC = false;
         bool modifyBootloader = false;
+        string mode = "udpbd";
 
         if (args.Length < 2 || !args.Contains("-ps2ip"))
         {
@@ -48,6 +49,14 @@ internal class Program
             else if (arg.Contains("-enablevmc"))
             {
                 enableVMC = true;
+            }
+            else if (arg.Contains("-udpfs"))
+            {
+                mode = "udpfs";
+            }
+            else if (arg.Contains("-udpfs_bd"))
+            {
+                mode = "udpfs_bd";
             }
             argIndex++;
         }
@@ -82,7 +91,7 @@ internal class Program
             MiscMethods.PauseExit(5);
         }
         Console.WriteLine($"{gameList.Count} games loaded");
-        CreateGameList(gamePath, gameList);
+        CreateGameList(gamePath, gameList, mode);
 
         FtpClient client = new(ps2ip.ToString());
         client.Config.LogToConsole = false; // Set to true when debugging FTP commands
@@ -99,7 +108,7 @@ internal class Program
             Console.WriteLine($"Unable to detect a valid Enceladus and SimpleNeutrinoLoader installation.");
             MiscMethods.PauseExit(26);
         }
-        MiscMethods.UpdateUDPConfig(client, ps2ip, syncTarget);
+        MiscMethods.UpdateUDPConfig(client, ps2ip, syncTarget, mode);
 
         if (enableVMC)
         {
@@ -140,7 +149,9 @@ internal class Program
             @"dotnet SNL-CLI.dll -path 'C:\PS2\' -ps2ip 192.168.0.10 -bin2iso -enablevmc" +
             "\n-path '?' is the file path to the CD and DVD folder that contain game ISOs.\n" +
             "-bin2iso enables automatic CD-ROM Bin to ISO conversion.\n" +
-            "-enablevmc will assign a virtual memory card for each game or group of games in 'vmc_groups.list'.\n");
+            "-enablevmc will assign a virtual memory card for each game or group of games in 'vmc_groups.list'.\n" +
+            "-udpfs will enable udpfs_server file-system support by updating 'UDPBDList.txt'.\n" +
+            "-udpfs_bd will enable udpfs_server block-device support by updating 'config/bsd-udpbd.toml'.\n");
     }
 
     static string GetInstallLocation(FtpClient client)
@@ -213,8 +224,12 @@ internal class Program
         return tempList;
     }
 
-    static void CreateGameList(string gamePath, List<string> gameList)
+    static void CreateGameList(string gamePath, List<string> gameList, string mode)
     {
+        if (mode == "udpfs_bd")
+        {
+            mode = "udpbd";
+        }
         List<string> gameListWithID = [];
         foreach (var game in gameList)
         {
@@ -223,7 +238,7 @@ internal class Program
             string friendlyName = Path.GetFileNameWithoutExtension(gamePath + game);
             if (!string.IsNullOrEmpty(serialGameID))
             {
-                gameListWithID.Add($"{friendlyName}|{serialGameID}|-dvd=udpbd:{game}");
+                gameListWithID.Add($"{friendlyName}|{serialGameID}|-dvd={mode}:{game}");
             }
             else
             {

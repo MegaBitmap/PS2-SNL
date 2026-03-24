@@ -35,13 +35,24 @@ internal partial class MiscMethods
         }
     }
 
-    public static void UpdateUDPConfig(FtpClient client, IPAddress ps2ip, string syncTarget)
+    public static void UpdateUDPConfig(FtpClient client, IPAddress ps2ip, string syncTarget, string mode)
     {
-        string udpConf = BSDConf.Config(ps2ip);
-        File.WriteAllText("temp-bsd-udpbd.toml", udpConf);
-        Thread.Sleep(200);
-        FTP.UploadFile(client, "temp-bsd-udpbd.toml", $"{syncTarget}/SimpleNeutrinoLoader/", "bsd-udpbd.toml");
-        Console.WriteLine($"Updated {syncTarget}/SimpleNeutrinoLoader/bsd-udpbd.toml with the IP address {ps2ip}");
+        if (mode == "udpbd" || mode == "udpfs_bd")
+        {
+            string udpConf = BSDConf.Udpbd(ps2ip.ToString(), mode);
+            File.WriteAllText("temp-bsd-udpbd.toml", udpConf);
+            FTP.UploadFile(client, "temp-bsd-udpbd.toml", $"{syncTarget}/SimpleNeutrinoLoader/", "bsd-udpbd.toml");
+            Console.WriteLine($"Updated {syncTarget}/SimpleNeutrinoLoader/bsd-udpbd.toml to ip={ps2ip}\n" +
+                $"Updated udp driver to {mode}.irx");
+        }
+        else if (mode == "udpfs")
+        {
+            string udpConf = BSDConf.Udpfs(ps2ip.ToString());
+            File.WriteAllText("temp-bsd-udpfs.toml", udpConf);
+            FTP.UploadFile(client, "temp-bsd-udpfs.toml", $"{syncTarget}/SimpleNeutrinoLoader/", "bsd-udpfs.toml");
+            Console.WriteLine($"Updated {syncTarget}/SimpleNeutrinoLoader/bsd-udpfs.toml to ip={ps2ip}");
+        }
+        
     }
 
     public static bool KillServer()

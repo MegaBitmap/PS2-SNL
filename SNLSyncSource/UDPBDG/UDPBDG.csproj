@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentFTP" Version="53.0.2" />
+    <PackageReference Include="FluentFTP" Version="54.0.2" />
     <PackageReference Include="pythonnet" Version="3.0.5" />
   </ItemGroup>
 

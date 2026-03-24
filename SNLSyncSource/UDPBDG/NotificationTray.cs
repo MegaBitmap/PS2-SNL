@@ -150,8 +150,17 @@ internal partial class NotificationTray : ApplicationContext
         int rValue = await Task.Run(serverFunc);
         isActive = false;
         if (rValue == 5)
-            RestartAdmin();
-
+        {
+            if (ServerName.Contains("udpbd-server", StringComparison.CurrentCultureIgnoreCase))
+            {
+                RestartAdmin();
+            }
+            else
+            {
+                MessageBox.Show($"Failed to open '{gamePath}'\n" +
+                    "Make sure that it is ejected/detached/unmounted.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         notifyIcon.Icon = Resources.XIcon;
         notifyIcon.Text = $"{ServerName} CRASHED!";
         ShowConsoleError();

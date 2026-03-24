@@ -8,7 +8,6 @@ To use this software you will need a ps2 capable of running homebrew, such as Fr
 The full-install size (SNL, Enceladus, and all device drivers) is less than 1.4MB and can be installed on a memory card.  
 The Lua interface code totals to around 300 lines which makes mods easy.  
 LaunchELF's text editor paired with a USB keyboard allows changes to be made from the PS2 itself.  
-The included version of neutrino is modified to read files from the same directory avoiding the need for subfolders.  
 
 ## Controls:
 
@@ -63,7 +62,7 @@ Let the PS2 idle on this screen for the next steps on the PC.
 **If you plan to use virtual memory cards please read this:**  
 VMCs only work with exFAT partitions.  
 In the SNL-UDPBDG Sync window, check the VMC checkbox then resync the game list.  
-You must use udpbd-server when using VMCs, udpbd-vexfat does NOT support VMCs.  
+You must use udpbd-server or udpfs_bd when using VMCs, udpbd-vexfat and udpfs do NOT support VMCs.  
 
 Start the SNL-UDPBDG sync/server app (UDPBDG.exe).  
 (optional) Click mount exFAT drive for VMC support.  
@@ -190,16 +189,16 @@ The following list files are checked on SNL startup:
 HDDList.txt, HDLList.txt, ILINKList.txt, MMCEList.txt, MX4List.txt, UDPBDList.txt, and USBList.txt.  
 Here is an example of the list file contents:  
 ```
-Katamari Damacy|SLUS_210.08|-bsd=udpbd|-dvd=mass:/DVD/Katamari Damacy.iso
-LEGO Star Wars 2|SLUS_214.09|-bsd=udpbd|-dvd=mass:/DVD/LEGO Star Wars 2.iso
-Midway Arcade Treasures 3|SLUS_210.94|-bsd=udpbd|-dvd=mass:/DVD/Midway Arcade Treasures 3.iso
+Katamari Damacy|SLUS_210.08|-bsd=udpbd|-dvd=udpbd:/DVD/Katamari Damacy.iso
+LEGO Star Wars 2|SLUS_214.09|-bsd=udpbd|-dvd=udpbd:/DVD/LEGO Star Wars 2.iso
+Midway Arcade Treasures 3|SLUS_210.94|-bsd=udpbd|-dvd=udpbd:/DVD/Midway Arcade Treasures 3.iso
 ```
 Each line uses `|` as a separator for different parts.  
 The first part is the name that will be visible on the SNL interface.  
 The second part is the serial game ID found in SYSTEM.CNF.  
 All further parts are command line arguments that will tell neutrino what settings to use for the selected game.  
 There can be a variable number of parts, for example:  
-`Katamari Damacy|SLUS_210.08|-bsd=udpbd|-dvd=mass:/DVD/Katamari Damacy.iso|-gc=23`  
+`Katamari Damacy|SLUS_210.08|-bsd=udpbd|-dvd=udpbd:/DVD/Katamari Damacy.iso|-gc=23`  
 The last part `-gc=23`, enables compatibility modes 2 and 3 when playing Katamari.  
 
 Here is a list of all neutrino arguments:  
@@ -211,6 +210,7 @@ Here is a list of all neutrino arguments:
                 - usb       (block device)
                 - mx4sio    (block device)
                 - udpbd     (block device)
+                - udpfs     (file system)
                 - ilink     (block device)
                 - mmce      (file system)
                   The following two require a hdd connected to a real sony network hdd adapter:
@@ -257,28 +257,25 @@ Here is a list of all neutrino arguments:
                 - 7: IOP: Fix game buffer overrun
                 Multiple options possible, for example -gc=23
 
--gsm=x:y:z        GS video mode
-                Parameter x = Interlaced field mode
-                A full height buffer is used by the game for displaying. Force video output to:
-                -      : don't force (default)  (480i/576i)
-                - fp   : force progressive scan (480p/576p)
+-gsm=v:c          GS video mode
+                Parameter v = Force video mode to:
+                -         : don't force (default)  (480i/576i)
+                - fp1     : force 240p/288p - auto PAL/NTSC
+                - fp2     : force 480p/576p - auto PAL/NTSC
+                - 1080ix1 : force 1080i width x1, height x1 (very small!)
+                - 1080ix2 : force 1080i width x2, height x2
+                - 1080ix3 : force 1080i width x3, height x3
 
-                Parameter y = Interlaced frame mode
-                A half height buffer is used by the game for displaying. Force video output to:
-                -      : don't force (default)  (480i/576i)
-                - fp1  : force progressive scan (240p/288p)
-                - fp2  : force progressive scan (480p/576p line doubling)
-
-                Parameter z = Compatibility mode
+                Parameter c = Compatibility mode:
                 -      : no compatibility mode (default)
                 - 1    : field flipping type 1 (GSM/OPL)
                 - 2    : field flipping type 2
                 - 3    : field flipping type 3
 
                 Examples:
-                -gsm=fp       - recommended mode
-                -gsm=fp::1    - recommended mode, with compatibility 1
-                -gsm=fp:fp2:2 - all parameters
+                -gsm=fp2      - recommended mode
+                -gsm=fp2:1    - recommended mode, with compatibility 1
+                -gsm=1080ix2
 
 -cwd=<path>       Change working directory
 -cfg=<file>       Load extra user/game specific config file (without .toml extension)

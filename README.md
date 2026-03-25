@@ -18,16 +18,17 @@ Press ⏹SQUARE or 🔼TRIANGLE to show what settings neutrino.elf will be passe
 Hold SELECT to exit to browser.  
 
 
-## UDPBD Setup:
+## UDPBD/UDPFS Setup:
 
-The SNL-UDPBDG or SNL-CLI application can be used to automatically install Enceladus, SNL, and drivers for UDPBD gameplay.  
+The UDPBDG or SNL-CLI application can be used to automatically install Enceladus, SNL, and drivers for UDPBD/UDPFS gameplay.  
 
-To save 210KB of space SNL-UDPBDG only includes drivers for UDPBD.  
+To save 210KB of space UDPBDG/SNL-CLI only includes drivers for UDPBD and UDPFS.  
 For HDD, UDPBD-HDD, HDL, ILINK, MMCE, MX4, or USB use the SNL-Full release.  
 
-Download SNL-UDPBDG from [here](https://github.com/MegaBitmap/PS2-SNL/releases).  
+Download SNL-UDPBD from [here](https://github.com/MegaBitmap/PS2-SNL/releases).  
 Extract the UDPBDG folder to the Desktop or Documents.  
 It is a portable app, do NOT use Program Files or any other system related folder.  
+If using udpfs or udpfs_bd mode, [Python](https://www.python.org/) 3.13 needs to be installed.  
 **DIRECT Connection** - Plug in the ethernet cable as shown: ↓  
 ![ps2-slim-connected-to-laptop](readmeImages/ps2-slim-connected-to-laptop.jpg)  
 For a **DIRECT** connection set a manual IPv4 address and subnet mask.  
@@ -61,11 +62,11 @@ Let the PS2 idle on this screen for the next steps on the PC.
 
 **If you plan to use virtual memory cards please read this:**  
 VMCs only work with exFAT partitions.  
-In the SNL-UDPBDG Sync window, check the VMC checkbox then resync the game list.  
+In the UDPBDG Sync-to-SNL window, check the VMC box then resync the game list.  
 You must use udpbd-server or udpfs_bd when using VMCs, udpbd-vexfat and udpfs do NOT support VMCs.  
 
-Start the SNL-UDPBDG sync/server app (UDPBDG.exe).  
-(optional) Click mount exFAT drive for VMC support.  
+Start the UDPBDG sync/server app.  
+Pick a mode, udpfs is the recommended.  
 Rip/copy any PlayStation 2 disc images you wish to load into a DVD or CD folder.  
 Click on choose game path and pick any game in a CD or DVD folder.  
 Example:  `E:/DVD/Grand Theft Auto III.iso`  
@@ -142,6 +143,9 @@ Next sync the game list, note that 'enablevmc' is optional.
 -path '?' is the file path to the CD and DVD folder that contain game ISOs.  
 -bin2iso enables automatic CD-ROM Bin to ISO conversion.  
 -enablevmc will assign a virtual memory card for each game or group of games in 'vmc_groups.list'.  
+-udpfs will enable udpfs_server file-system support by updating 'UDPBDList.txt'.  
+-udpfs_bd will enable udpfs_server block-device support by updating 'bsd-udpbd.toml'.  
+
 
 Unmount the exFAT partition then Start the udpbd-server.  
 ```
@@ -204,8 +208,8 @@ The last part `-gc=23`, enables compatibility modes 2 and 3 when playing Katamar
 Here is a list of all neutrino arguments:  
 
 ```
--bsd=<driver>     Backing store drivers, supported are:
-                - no        (uses cdvd, default)
+-bsd=<driver>     Backing store drivers (optional, auto-detected from path prefix), supported are:
+                - no        (uses cdvd)
                 - ata       (block device)
                 - usb       (block device)
                 - mx4sio    (block device)

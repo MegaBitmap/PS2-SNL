@@ -151,7 +151,7 @@ internal class Program
             "-bin2iso enables automatic CD-ROM Bin to ISO conversion.\n" +
             "-enablevmc will assign a virtual memory card for each game or group of games in 'vmc_groups.list'.\n" +
             "-udpfs will enable udpfs_server file-system support by updating 'UDPBDList.txt'.\n" +
-            "-udpfs_bd will enable udpfs_server block-device support by updating 'config/bsd-udpbd.toml'.\n");
+            "-udpfs_bd will enable udpfs_server block-device support by updating 'bsd-udpbd.toml'.\n");
     }
 
     static string GetInstallLocation(FtpClient client)

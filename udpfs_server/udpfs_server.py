@@ -401,6 +401,7 @@ class UdpfsServer:
 
         print(f"  Listening...")
         print()
+        wait_network = True
         while True:
             try:
                 r, _, _ = select.select([self.sock, self.dsock], [], [])
@@ -408,6 +409,10 @@ class UdpfsServer:
                     if ready is self.sock:
                         try:
                             data, addr = self.sock.recvfrom(2048)
+                            if wait_network:
+                                wait_network = False
+                                print("Waiting for the network to fully initialize . . .")
+                                time.sleep(4)
                             self._handle_discovery(data, addr)
                         except BlockingIOError:
                             pass

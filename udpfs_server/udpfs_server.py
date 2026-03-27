@@ -376,7 +376,6 @@ class UdpfsServer:
         self._start_time = time.monotonic()
         self._last_status_time = 0.0
         self._last_status_bytes = 0
-        self._status_visible = False
 
     def run(self):
         """Main server loop"""
@@ -423,8 +422,6 @@ class UdpfsServer:
                         except BlockingIOError:
                             pass
             except KeyboardInterrupt:
-                if self._status_visible:
-                    sys.stdout.write(f"\r{'':<79}\r")
                 print("\nShutting down...")
                 self._cleanup()
                 self._print_stats()
@@ -442,7 +439,7 @@ class UdpfsServer:
             return f"{n / (1024 * 1024 * 1024):.1f} GB"
 
     def _update_status(self):
-        """Update in-place status line (throttled to 1/sec)"""
+        """Update status line (throttled to 1/sec)"""
         now = time.monotonic()
         if now - self._last_status_time < 1.0:
             return
@@ -464,19 +461,13 @@ class UdpfsServer:
         h, rem = divmod(int(elapsed), 3600)
         m, s = divmod(rem, 60)
 
-        line = f"[{h:02d}:{m:02d}:{s:02d}] {op_str} | {self._format_bytes(total_bytes)} @ {self._format_bytes(int(rate))}/s"
-        sys.stdout.write(f"\r{line:<79}")
-        sys.stdout.flush()
+        print(f"[{h:02d}:{m:02d}:{s:02d}] {op_str} | {self._format_bytes(total_bytes)} @ {self._format_bytes(int(rate))}/s")
 
         self._last_status_time = now
         self._last_status_bytes = total_bytes
-        self._status_visible = True
 
     def _print_event(self, msg: str):
-        """Print an event message, clearing the status line first"""
-        if self._status_visible:
-            sys.stdout.write(f"\r{'':<79}\r")
-            self._status_visible = False
+        """Print an event message"""
         print(msg)
 
     def _cleanup(self):

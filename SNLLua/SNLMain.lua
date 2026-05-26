@@ -54,7 +54,7 @@ while true do
 	if ShowNeutrinoArgs then
 		Font.ftPrint(SmallFont, 20, 15, 0, 0, 0, NeutrinoArgs, HighlightColor)
 	else
-		Font.ftPrint(SmallFont, 402, 15, 0, 0, 0, "Simple Neutrino Loader v1.1.1.0", FontColor)
+		Font.ftPrint(SmallFont, 402, 15, 0, 0, 0, "Simple Neutrino Loader v1.1.1.1", FontColor)
 	end
 	ReadInput()
 

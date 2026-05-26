@@ -28,7 +28,7 @@ For HDD, UDPBD-HDD, HDL, ILINK, MMCE, MX4, or USB use the SNL-Full release.
 Download SNL-UDPBD from [here](https://github.com/MegaBitmap/PS2-SNL/releases).  
 Extract the UDPBDG folder to the Desktop or Documents.  
 It is a portable app, do NOT use Program Files or any other system related folder.  
-If using udpfs or udpfs_bd mode, [Python](https://www.python.org/) 3.13 needs to be installed.  
+If using udpfs or udpfs_bd mode, [Python](https://www.python.org/) 3.14 needs to be installed.  
 **DIRECT Connection** - Plug in the ethernet cable as shown: ↓  
 ![ps2-slim-connected-to-laptop](readmeImages/ps2-slim-connected-to-laptop.jpg)  
 For a **DIRECT** connection set a manual IPv4 address and subnet mask.  

@@ -9,11 +9,10 @@
 dofile("SNLFunctions.lua");
 
 HighlightColor = Color.new(0, 69, 0) -- dark green
-BackgroundColor = Color.new(255, 240, 50) -- yellow
 FontColor = Color.new(0, 0, 0) -- black
-SineColor = Color.new(255, 180, 50) -- orange
-SineOutline = Color.new(255, 210, 50) -- light orange
-SineOutline2 = Color.new(255, 230, 50) -- lighter orange
+BackgroundColor = Color.new(255, 240, 0) -- yellow
+SineColor1 = Color.new(255, 100, 52) -- red
+SineColor2 = Color.new(255, 204, 0) -- orange
 SSFontColor = Color.new(255, 255, 255) -- white
 
 Font.ftInit()

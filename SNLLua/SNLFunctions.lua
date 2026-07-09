@@ -231,10 +231,8 @@ function DrawSine()
 	end
 	for i = 0, 640, 2 do
 		local xPos = (640 - i)
-		local yPos = math.sin((i + DrawOffset) / 150) * (i / 16 + 40)
-		Graphics.drawRect(xPos, yPos + 140, 2, 80, SineOutline2)
-		Graphics.drawRect(xPos, yPos + 220, 2, 80, SineOutline)
-		Graphics.drawRect(xPos, yPos + 300, 2, 230, SineColor)
+		local yPos = math.sin((i + DrawOffset) / 150) * (i - 320) / 4 + 160
+		Graphics.drawQuad(xPos, yPos, xPos, yPos + 368, xPos + 2, yPos, xPos + 2, yPos + 368, SineColor1, SineColor2, SineColor1, SineColor2)
 	end
 end
 
